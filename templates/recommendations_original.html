@@ -1,0 +1,1649 @@
+<!-- File: templates/recommendations.html -->
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 खाद्य सिफारिशें | Food Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background: #f0f2f5;
+        }
+        
+        .rec-date-bar {
+            margin-left: auto;
+            font-size: 0.82em;
+            opacity: 0.85;
+            white-space: nowrap;
+            align-self: center;
+        }
+        @media(max-width: 768px) { .rec-date-bar { display: none; } }
+
+        /* Rasi chips in sidebar */
+        .rasi-chips-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .rec-rasi-chip {
+            display: flex; align-items: center; gap: 4px;
+            background: #f8f9ff; border: 2px solid #e0e7ff;
+            border-radius: 16px; padding: 5px 11px;
+            cursor: pointer; font-size: 0.8em;
+            transition: all 0.15s; user-select: none;
+        }
+        .rec-rasi-chip:hover { border-color: #4169e1; background: #eef2ff; }
+        .rec-rasi-chip.selected {
+            background: #fee2e2; border-color: #ef4444;
+            color: #b91c1c; font-weight: 700;
+        }
+.top-header {
+            background: linear-gradient(135deg, #4169e1 0%, #1e3a8a 100%);
+            color: white;
+            padding: 25px 40px;
+            text-align: center;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+        }
+        
+        .header-text h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .header-text p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            background: white;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 0;
+        }
+        
+        .nav-tabs-inner {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-tabs-left {
+            display: flex;
+        }
+        
+        .nav-tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            font-size: 1.05em;
+            color: #666;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-tab.active {
+            color: #4169e1;
+            border-bottom-color: #4169e1;
+            background: #f8f9ff;
+        }
+        /* Restriction toast notification */
+        .restriction-toast {
+            position: fixed;
+            top: 72px;
+            right: 20px;
+            max-width: 360px;
+            background: linear-gradient(135deg, #fff7ed, #fffbf0);
+            border: 2px solid #f97316;
+            border-radius: 12px;
+            padding: 12px 40px 12px 14px;
+            font-size: 0.84em;
+            color: #92400e;
+            font-weight: 600;
+            line-height: 1.6;
+            box-shadow: 0 4px 20px rgba(249,115,22,0.25);
+            z-index: 999;
+            animation: slideInToast 0.3s ease;
+            display: none;
+        }
+        .restriction-toast.visible { display: block; }
+        .restriction-toast .rb-title {
+            font-size: 0.92em;
+            color: #c2410c;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        .restriction-toast-close {
+            position: absolute;
+            top: 8px; right: 10px;
+            background: none; border: none;
+            font-size: 1em; cursor: pointer;
+            color: #c2410c; opacity: 0.6;
+            line-height: 1;
+        }
+        .restriction-toast-close:hover { opacity: 1; }
+        @keyframes slideInToast {
+            from { transform: translateX(20px); opacity: 0; }
+            to   { transform: translateX(0);    opacity: 1; }
+        }
+        @media(max-width:600px) {
+            .restriction-toast { right:8px; left:8px; max-width:unset; top:60px; }
+        }
+
+        /* Sub-tabs inside food tab */
+        .sub-tab-bar {
+            display: flex;
+            gap: 4px;
+            background: white;
+            border-radius: 10px;
+            padding: 6px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .sub-tab {
+            padding: 8px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .sub-tab:hover { background: #f0f4ff; color: #4169e1; }
+        .sub-tab.active { background: #4169e1; color: white; }
+
+        
+        .language-selector {
+            display: flex;
+            gap: 8px;
+            padding: 10px 20px;
+        }
+        
+        .lang-btn {
+            padding: 6px 14px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            color: #666;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn:hover {
+            border-color: #4169e1;
+            background: #f8f9ff;
+        }
+        
+        .lang-btn.active {
+            background: #4169e1;
+            color: white;
+            border-color: #4169e1;
+        }
+        
+        .main-container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+            height: calc(100vh - 180px);
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 2px solid #e0e0e0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            background: white;
+            cursor: pointer;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4169e1;
+        }
+        
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4169e1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #3557c7;
+            transform: translateY(-2px);
+        }
+        
+        .selected-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .selected-counter {
+            background: #4169e1;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .counter-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .counter-text {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .clear-btn {
+            width: 100%;
+            padding: 10px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .clear-btn:hover {
+            background: #5a6268;
+        }
+        
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            font-family: inherit;
+            padding: 5px;
+        }
+        
+        .page-header {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .page-header h1 {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        thead th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1em;
+            font-weight: 700;
+        }
+        
+        thead th:first-child {
+            width: 30%;
+        }
+        
+        .header-eat {
+            background: #90ee90;
+            color: #000;
+        }
+        
+        .header-less-eat {
+            background: #ffd580;
+            color: #000;
+        }
+        
+        .header-dont-eat {
+            background: #ffb3ba;
+            color: #000;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        tbody td {
+            padding: 12px 15px;
+            vertical-align: top;
+        }
+        
+        .food-type-cell {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1em;
+            background: #2c5aa0;
+        }
+        
+        .food-items {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .food-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+        
+        .food-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #4169e1;
+        }
+        
+        .food-name {
+            color: #333;
+        }
+        
+        .empty-cell {
+            color: #999;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <div class="header-content">
+            <div class="logo">🌾</div>
+            <div class="header-text">
+                <h1>🍚 विद्या आहार औषधि</h1>
+                <p>आयुर्वेदिक आहार मार्गदर्शन | Ayurvedic Food Guidance System</p>
+            </div>
+            <div id="recDateBar" class="rec-date-bar"></div>
+        </div>
+    </div>
+    
+    <nav class="nav-tabs">
+        <div class="nav-tabs-inner">
+            <div class="nav-tabs-left">
+                <div class="nav-tab active" onclick="switchTab('food')" data-tab="food">
+                    <span>🍽️</span>
+                    <span data-lang="hi">भोजन सिफारिशें</span><span data-lang="en" style="display:none;">Food Recommendations</span><span data-lang="mr" style="display:none;">अन्न शिफारसी</span>
+                </div>
+                <div class="nav-tab" onclick="switchTab('rawmaterial')" data-tab="rawmaterial">
+                    <span>🌱</span>
+                    <span data-lang="hi">कच्ची सामग्री</span><span data-lang="en" style="display:none;">Raw Material</span><span data-lang="mr" style="display:none;">कच्चा माल</span>
+                </div>
+                <div class="nav-tab" onclick="switchTab('shodhana')" data-tab="shodhana">
+                    <span>🧹</span>
+                    <span data-lang="hi">शोधन</span><span data-lang="en" style="display:none;">Purification</span><span data-lang="mr" style="display:none;">शोधन</span>
+                </div>
+                <div class="nav-tab" onclick="switchTab('dryprep')" data-tab="dryprep">
+                    <span>🌿</span>
+                    <span data-lang="hi">सूखी तैयारी</span><span data-lang="en" style="display:none;">Dry Preparation</span><span data-lang="mr" style="display:none;">सुकी तयारी</span>
+                </div>
+                <div class="nav-tab" onclick="switchTab('education')" data-tab="education">
+                    <span>📚</span>
+                    <span data-lang="hi">आहार ज्ञान</span><span data-lang="en" style="display:none;">Food Education</span><span data-lang="mr" style="display:none;">आहार ज्ञान</span>
+                </div>
+
+
+            </div>
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="changeLanguage('hi')">हिन्दी</button>
+                <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+                <button class="lang-btn" onclick="changeLanguage('mr')">मराठी</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="section-title">
+                    <span data-lang="hi">विकल्प चुनें</span>
+                    <span data-lang="en" style="display:none;">Select Options</span>
+                    <span data-lang="mr" style="display:none;">पर्याय निवडा</span>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <span data-lang="hi">ऋतु चुनें:</span>
+                        <span data-lang="en" style="display:none;">Select Season:</span>
+                        <span data-lang="mr" style="display:none;">ऋतू निवडा:</span>
+                    </label>
+                    <select id="rituSelect">
+                        <option value=""
+                            data-hi="-- सभी ऋतुएँ --" data-en="-- All Seasons --" data-mr="-- सर्व ऋतू --">-- सभी ऋतुएँ --</option>
+                        <option value="margshirsh" {% if preference.ritu == 'margshirsh' %}selected{% endif %}
+                            data-hi="मार्गशीर्ष (Nov-Dec)" data-en="Margshirsh (Nov-Dec)" data-mr="मार्गशीर्ष (Nov-Dec)">मार्गशीर्ष (Nov-Dec)</option>
+                        <option value="paush" {% if preference.ritu == 'paush' %}selected{% endif %}
+                            data-hi="पौष (Dec-Jan)" data-en="Paush (Dec-Jan)" data-mr="पौष (Dec-Jan)">पौष (Dec-Jan)</option>
+                        <option value="magh" {% if preference.ritu == 'magh' %}selected{% endif %}
+                            data-hi="माघ (Jan-Feb)" data-en="Magh (Jan-Feb)" data-mr="माघ (Jan-Feb)">माघ (Jan-Feb)</option>
+                        <option value="phalgun" {% if preference.ritu == 'phalgun' %}selected{% endif %}
+                            data-hi="फाल्गुन (Feb-Mar)" data-en="Phalgun (Feb-Mar)" data-mr="फाल्गुन (Feb-Mar)">फाल्गुन (Feb-Mar)</option>
+                        <option value="chaitra" {% if preference.ritu == 'chaitra' %}selected{% endif %}
+                            data-hi="चैत्र (Mar-Apr)" data-en="Chaitra (Mar-Apr)" data-mr="चैत्र (Mar-Apr)">चैत्र (Mar-Apr)</option>
+                        <option value="vaishakh" {% if preference.ritu == 'vaishakh' %}selected{% endif %}
+                            data-hi="वैशाख (Apr-May)" data-en="Vaishakh (Apr-May)" data-mr="वैशाख (Apr-May)">वैशाख (Apr-May)</option>
+                        <option value="jyeshtha" {% if preference.ritu == 'jyeshtha' %}selected{% endif %}
+                            data-hi="ज्येष्ठ (May-Jun)" data-en="Jyeshtha (May-Jun)" data-mr="ज्येष्ठ (May-Jun)">ज्येष्ठ (May-Jun)</option>
+                        <option value="ashadh" {% if preference.ritu == 'ashadh' %}selected{% endif %}
+                            data-hi="आषाढ़ (Jun-Jul)" data-en="Ashadh (Jun-Jul)" data-mr="आषाढ (Jun-Jul)">आषाढ़ (Jun-Jul)</option>
+                        <option value="shravan" {% if preference.ritu == 'shravan' %}selected{% endif %}
+                            data-hi="श्रावण (Jul-Aug)" data-en="Shravan (Jul-Aug)" data-mr="श्रावण (Jul-Aug)">श्रावण (Jul-Aug)</option>
+                        <option value="bhadrapad" {% if preference.ritu == 'bhadrapad' %}selected{% endif %}
+                            data-hi="भाद्रपद (Aug-Sep)" data-en="Bhadrapad (Aug-Sep)" data-mr="भाद्रपद (Aug-Sep)">भाद्रपद (Aug-Sep)</option>
+                        <option value="ashwin" {% if preference.ritu == 'ashwin' %}selected{% endif %}
+                            data-hi="आश्विन (Sep-Oct)" data-en="Ashwin (Sep-Oct)" data-mr="आश्विन (Sep-Oct)">आश्विन (Sep-Oct)</option>
+                        <option value="kartik" {% if preference.ritu == 'kartik' %}selected{% endif %}
+                            data-hi="कार्तिक (Oct-Nov)" data-en="Kartik (Oct-Nov)" data-mr="कार्तिक (Oct-Nov)">कार्तिक (Oct-Nov)</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span data-lang="hi">बीमारी के अनुसार:</span>
+                        <span data-lang="en" style="display:none;">By Disease:</span>
+                        <span data-lang="mr" style="display:none;">आजारानुसार:</span>
+                    </label>
+                    <select id="bimariSelect">
+                        <option value="" {% if not preference.bimari %}selected{% endif %}
+                            data-hi="-- सभी --" data-en="-- All --" data-mr="-- सर्व --">-- सभी --</option>
+                        <option value="fever" {% if preference.bimari == 'fever' %}selected{% endif %}
+                            data-hi="बुखार" data-en="Fever" data-mr="ताप">बुखार</option>
+                        <option value="cold" {% if preference.bimari == 'cold' %}selected{% endif %}
+                            data-hi="सर्दी-जुकाम" data-en="Cold" data-mr="सर्दी">सर्दी-जुकाम</option>
+                        <option value="cough" {% if preference.bimari == 'cough' %}selected{% endif %}
+                            data-hi="खांसी" data-en="Cough" data-mr="खोकला">खांसी</option>
+                        <option value="diabetes" {% if preference.bimari == 'diabetes' %}selected{% endif %}
+                            data-hi="मधुमेह" data-en="Diabetes" data-mr="मधुमेह">मधुमेह</option>
+                        <option value="bp" {% if preference.bimari == 'bp' %}selected{% endif %}
+                            data-hi="उच्च रक्तचाप" data-en="High BP" data-mr="उच्च रक्तदाब">उच्च रक्तचाप</option>
+                        <option value="acidity" {% if preference.bimari == 'acidity' %}selected{% endif %}
+                            data-hi="एसिडिटी" data-en="Acidity" data-mr="आम्लपित्त">एसिडिटी</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span data-lang="hi">परहेज (रासी):</span>
+                        <span data-lang="en" style="display:none;">Restriction (Rasi):</span>
+                        <span data-lang="mr" style="display:none;">परहेज (रासी):</span>
+                    </label>
+                    <div class="rasi-chips-wrap" id="recRasiChips">
+                        <div class="rec-rasi-chip" data-val="hari"
+                             data-hi="🌿 हरी" data-en="🌿 Hari" data-mr="🌿 हरी">🌿 हरी</div>
+                        <div class="rec-rasi-chip" data-val="meetha"
+                             data-hi="🍬 मीठा" data-en="🍬 Meetha" data-mr="🍬 गोड">🍬 मीठा</div>
+                        <div class="rec-rasi-chip" data-val="ghee"
+                             data-hi="🫙 घी" data-en="🫙 Ghee" data-mr="🫙 तूप">🫙 घी</div>
+                        <div class="rec-rasi-chip" data-val="doodh"
+                             data-hi="🥛 दूध" data-en="🥛 Doodh" data-mr="🥛 दूध">🥛 दूध</div>
+                        <div class="rec-rasi-chip" data-val="khatai"
+                             data-hi="🍋 खटाई" data-en="🍋 Khatai" data-mr="🍋 आंबट">🍋 खटाई</div>
+                        <div class="rec-rasi-chip" data-val="tel"
+                             data-hi="🛢️ तेल" data-en="🛢️ Tel" data-mr="🛢️ तेल">🛢️ तेल</div>
+                        <div class="rec-rasi-chip" data-val="namak"
+                             data-hi="🧂 नमक" data-en="🧂 Namak" data-mr="🧂 मीठ">🧂 नमक</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <span data-lang="hi">अधिकतम व्यंजन:</span>
+                        <span data-lang="en" style="display:none;">Maximum Items:</span>
+                        <span data-lang="mr" style="display:none;">कमाल पदार्थ:</span>
+                    </label>
+                    <select id="maxItemsSelect" onchange="changeMaxItems(parseInt(this.value))">
+                        <option value="{{ preference.max_items }}" selected>{{ preference.max_items }}</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                
+                <button class="submit-btn" onclick="loadFoodData()">
+                    <span data-lang="hi">सिफारिशें प्राप्त करें</span>
+                    <span data-lang="en" style="display:none;">Get Recommendations</span>
+                    <span data-lang="mr" style="display:none;">शिफारसी मिळवा</span>
+                </button>
+            </div>
+            
+            <!-- counterNumber hidden — count shown in floating cart FAB instead -->
+            <span id="counterNumber" style="display:none;">0 / {{ preference.max_items }}</span>
+        </aside>
+        
+        <main class="content-area">
+            <!-- Sub-tabs inside Food Recommendations -->
+            <div class="sub-tab-bar">
+                <div class="sub-tab active" onclick="switchSubTab('recommendations')" data-subtab="recommendations">
+                    <span>📋</span>
+                    <span data-lang="hi">सिफारिशें</span><span data-lang="en" style="display:none;">Recommendations</span><span data-lang="mr" style="display:none;">शिफारसी</span>
+                </div>
+                <div class="sub-tab" onclick="switchSubTab('allfoods')" data-subtab="allfoods">
+                    <span>🗂️</span>
+                    <span data-lang="hi">सभी खाद्य पदार्थ</span><span data-lang="en" style="display:none;">All Food Items</span><span data-lang="mr" style="display:none;">सर्व अन्न पदार्थ</span>
+                </div>
+            </div>
+
+            <!-- Sub-panel: Recommendations -->
+            <div id="sub-panel-recommendations">
+<!-- Restriction toast notification (fixed top-right) -->
+    <div id="recRestrictionBanner" class="restriction-toast">
+        <button class="restriction-toast-close" onclick="document.getElementById('recRestrictionBanner').classList.remove('visible')" title="Close">✕</button>
+    </div>
+                <div class="search-bar">
+                    <span style="font-size: 1.2em;">🔍</span>
+                    <input type="text" id="searchInput" placeholder="व्यंजन खोजें... | Search items... | वस्तू शोधा..." oninput="filterTable()">
+                </div>
+                <div class="page-header">
+                    <span>📋</span>
+                    <h1>
+                        <span data-lang="hi">खाद्य सिफारिशें</span>
+                        <span data-lang="en" style="display:none;">Food Recommendations</span>
+                        <span data-lang="mr" style="display:none;">अन्न शिफारसी</span>
+                    </h1>
+                </div>
+                <div class="table-container" id="tableContainer">
+                    <p style="padding: 40px; text-align: center; color: #666;">सिफारिशें लोड हो रही हैं...</p>
+                </div>
+            </div>
+
+            <!-- Sub-panel: All Foods (injected here) -->
+            <div id="sub-panel-allfoods" style="display:none;">
+                {% include 'tabs/all_foods.html' %}
+            </div>
+        </main>
+    </div>
+
+    <!-- ================================================================
+         TAB CONTENT PANELS (loaded via Jinja2 include)
+         ================================================================ -->
+    <div id="tab-panel-rawmaterial" class="tab-panel" style="display:none; padding:20px; max-width:1600px; margin:0 auto;">
+        {% include 'tabs/raw_material.html' %}
+    </div>
+    <div id="tab-panel-shodhana" class="tab-panel" style="display:none; padding:20px; max-width:1600px; margin:0 auto;">
+        {% include 'tabs/shodhana.html' %}
+    </div>
+    <div id="tab-panel-dryprep" class="tab-panel" style="display:none; padding:20px; max-width:1600px; margin:0 auto;">
+        {% include 'tabs/dry_preparation.html' %}
+    </div>
+    <div id="tab-panel-education" class="tab-panel" style="display:none; padding:20px; max-width:1600px; margin:0 auto;">
+        {% include 'tabs/food_education.html' %}
+    </div>
+
+
+
+    <script>
+        // ── Language: initialize from server-side preference ──────────────
+        let currentLang = '{{ preference.language or "hi" }}';
+        let selectedItems = new Set();
+        let maxItems = {{ preference.max_items }};
+        let cachedFoodData = null;
+
+        function applyLanguage(lang) {
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const btnLang = btn.getAttribute('onclick').match(/'(\w+)'/)?.[1];
+                btn.classList.toggle('active', btnLang === lang);
+            });
+            // Show/hide spans
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+                el.style.display = '';
+            });
+            // Swap dropdown option text using data attributes
+            document.querySelectorAll('option[data-hi]').forEach(opt => {
+                opt.textContent = opt.getAttribute(`data-${lang}`) || opt.getAttribute('data-hi');
+            });
+            updateTableHeaders(lang);
+            // Update date bar and rasi in new language
+            updateRecDateBar();
+            renderRasiChips();
+            updateRasiBanner();
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            applyLanguage(lang);
+            // Reset tab caches so they reload in new language
+            if (typeof shodhanaLoaded !== 'undefined') shodhanaLoaded = false;
+            if (typeof afLoaded      !== 'undefined') afLoaded        = false;
+            if (typeof rmLoaded      !== 'undefined') rmLoaded        = false;
+            if (typeof dpLoaded      !== 'undefined') dpLoaded        = false;
+            loadFoodData();
+        }
+        
+        function updateTableHeaders(lang) {
+            const headers = {
+                hi: { category: 'श्रेणी | Category', eat: '✅ खाएं', lessEat: '⚠️ कम खाएं', dontEat: '❌ न खाएं' },
+                en: { category: 'Category | श्रेणी', eat: '✅ Eat',   lessEat: '⚠️ Less Eat', dontEat: '❌ Avoid' },
+                mr: { category: 'श्रेणी | Category', eat: '✅ खा',    lessEat: '⚠️ कमी खा',   dontEat: '❌ खाऊ नका' }
+            };
+            const h = headers[lang] || headers.hi;
+            const thead = document.querySelector('#tableContainer thead');
+            if (thead) {
+                const ths = thead.querySelectorAll('th');
+                if (ths.length >= 4) {
+                    ths[0].innerHTML = h.category;
+                    ths[1].innerHTML = h.eat;
+                    ths[2].innerHTML = h.lessEat;
+                    ths[3].innerHTML = h.dontEat;
+                }
+            }
+        }
+        
+        async function loadFoodData() {
+            const container = document.getElementById('tableContainer');
+            container.innerHTML = '<p style="padding: 40px; text-align: center; color: #666;">सिफारिशें लोड हो रही हैं...</p>';
+            
+            const ritu   = document.getElementById('rituSelect')?.value   || '';
+            const bimari = document.getElementById('bimariSelect')?.value || '';
+
+            try {
+                const response = await fetch('/api/food-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ language: currentLang, ritu, bimari,
+                        rasa: getRasiString(),
+                        max_items: parseInt(document.getElementById('maxItemsSelect')?.value || maxItems) })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Use dropdown value as authoritative — don't let server overwrite it
+                    const dropdownMax = parseInt(document.getElementById('maxItemsSelect')?.value);
+                    if (dropdownMax && dropdownMax !== maxItems) maxItems = dropdownMax;
+                    else if (data.max_items) maxItems = data.max_items;
+                    lastFoodData = data.data;
+                    displayTable(data.data);
+                    loadSelectedItems();
+                } else {
+                    container.innerHTML = `<p style="padding:40px;text-align:center;color:#dc3545;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                container.innerHTML = '<p style="padding: 40px; text-align: center; color: #dc3545;">त्रुटि: सिफारिशें लोड नहीं हो सकीं</p>';
+            }
+        }
+        
+        function displayTable(foodData) {
+            if (Object.keys(foodData).length === 0) {
+                document.getElementById('tableContainer').innerHTML =
+                    '<p style="padding:40px;text-align:center;color:#888;">कोई परिणाम नहीं मिला। कृपया फ़िल्टर बदलें।<br>No results found. Please adjust your filters.</p>';
+                return;
+            }
+
+            const _h = {
+                hi:  ['श्रेणी | Category','✅ खाएं | Eat','⚠️ कम खाएं | Less','❌ न खाएं | Avoid'],
+                en:  ['Category | श्रेणी','✅ Eat','⚠️ Less Eat','❌ Avoid'],
+                mr:  ['श्रेणी | Category','✅ खा','⚠️ कमी खा','❌ खाऊ नका']
+            }[currentLang] || ['श्रेणी | Category','✅ खाएं | Eat','⚠️ कम खाएं | Less','❌ न खाएं | Avoid'];
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>${_h[0]}</th>
+                            <th class="header-eat">${_h[1]}</th>
+                            <th class="header-less-eat">${_h[2]}</th>
+                            <th class="header-dont-eat">${_h[3]}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            for (const [key, value] of Object.entries(foodData)) {
+                html += `
+                    <tr>
+                        <td class="food-type-cell" data-typecode="${key}">${value.name}</td>
+                        <td>
+                            <div class="food-items">
+                                ${value.eat.map(food => `
+                                    <label class="food-item">
+                                        <input type="checkbox" value="${food.id}" onchange="toggleFood(this, ${food.id})">
+                                        <span class="food-name">${food.name}</span>
+                                    </label>
+                                `).join('') || '<span class="empty-cell">-</span>'}
+                            </div>
+                        </td>
+                        <td style="background: #fffbea;">
+                            <div class="food-items">
+                                ${value.less_eat.map(food => `
+                                    <label class="food-item">
+                                        <input type="checkbox" value="${food.id}" onchange="toggleFood(this, ${food.id})">
+                                        <span class="food-name">${food.name}</span>
+                                    </label>
+                                `).join('') || '<span class="empty-cell">-</span>'}
+                            </div>
+                        </td>
+                        <td style="background: #fff0f0;">
+                            <div class="food-items">
+                                ${value.dont_eat.map(food => `
+                                    <span class="food-name">${food.name}</span>
+                                `).join('<br>') || '<span class="empty-cell">-</span>'}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            html += `</tbody></table>`;
+            document.getElementById('tableContainer').innerHTML = html;
+            updateTableHeaders(currentLang);
+        }
+        
+        async function toggleFood(checkbox, foodId) {
+            const id     = parseInt(foodId);   // always integer
+            const action = checkbox.checked ? 'add' : 'remove';
+            
+            if (action === 'add' && selectedItems.size >= maxItems) {
+                const lang = currentLang;
+                const msg  = lang === 'en' ? `Maximum ${maxItems} items limit reached!` :
+                             lang === 'mr' ? `कमाल ${maxItems} पदार्थांची मर्यादा!` :
+                                             `अधिकतम ${maxItems} व्यंजन की सीमा पूर्ण!`;
+                alert(msg);
+                checkbox.checked = false;
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/toggle-selection', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ food_id: id, action })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (action === 'add') {
+                        selectedItems.add(id);
+                        // Add to cart drawer
+                        const nameEl   = checkbox.closest('label')?.querySelector('.food-name');
+                        const name     = nameEl ? nameEl.textContent.trim() : '';
+                        const row      = checkbox.closest('tr');
+                        const typeCell = row?.querySelector('.food-type-cell');
+                        const typeName = typeCell ? typeCell.textContent.trim() : '';
+                        if (typeof cartItems !== 'undefined') {
+                            // typeCode from data-typecode attr; fallback to typeName
+                            const typeCode = typeCell?.getAttribute('data-typecode') || typeName;
+                            cartItems[id] = { name, typeCode };
+                            if (typeof renderCart === 'function') renderCart();
+                        }
+                    } else {
+                        selectedItems.delete(id);
+                        if (typeof cartItems !== 'undefined') {
+                            delete cartItems[id];
+                            if (typeof renderCart === 'function') renderCart();
+                        }
+                    }
+                    updateCounter();
+                } else {
+                    alert(data.error);
+                    checkbox.checked = !checkbox.checked;
+                }
+            } catch (error) {
+                alert('त्रुटि: ' + error.message);
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+        
+        async function loadSelectedItems() {
+            try {
+                const response = await fetch('/api/selected-foods');
+                const data = await response.json();
+                
+                if (data.success) {
+                    selectedItems.clear();
+                    // Rebuild cartItems (int keys throughout)
+                    if (typeof cartItems !== 'undefined') cartItems = {};
+                    data.items.forEach(item => {
+                        const id = parseInt(item.food_id);
+                        selectedItems.add(id);
+                        if (typeof cartItems !== 'undefined') {
+                            cartItems[id] = { name: item.name, typeCode: item.type };
+                        }
+                    });
+                    // Sync checkboxes
+                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                        cb.checked = selectedItems.has(parseInt(cb.value));
+                    });
+                    // Render cart then update counter (cart needs data first)
+                    if (typeof renderCart === 'function') renderCart();
+                    updateCounter();
+                }
+            } catch (error) {
+                console.error('Error loading selected items:', error);
+            }
+        }
+        
+        // ── changeMaxItems — handles increase, decrease, confirmation, server sync ──
+        async function changeMaxItems(newMax) {
+            const oldMax  = maxItems;
+            const current = selectedItems.size;
+            const lang    = currentLang;
+
+            if (newMax < oldMax && current > newMax) {
+                // Lowering below current selection — ask for confirmation
+                const msg = lang === 'en'
+                    ? `You have ${current} items selected but the new limit is ${newMax}. This will clear ALL selected items. Continue?`
+                    : lang === 'mr'
+                    ? `तुम्ही ${current} पदार्थ निवडले आहेत, पण नवीन मर्यादा ${newMax} आहे. सर्व निवड साफ होईल. सुरू ठेवायचे?`
+                    : `आपने ${current} व्यंजन चुने हैं लेकिन नई सीमा ${newMax} है। सभी चयन साफ़ हो जाएंगे। जारी रखें?`;
+
+                if (!confirm(msg)) {
+                    // Revert the select dropdown to old value
+                    document.getElementById('maxItemsSelect').value = oldMax;
+                    return;
+                }
+                // User confirmed — clear all selections then apply new max
+                await clearSelection();
+            }
+
+            // Apply new max
+            maxItems = newMax;
+            updateCounter();
+
+            // Persist to server so toggle-selection uses the new limit
+            try {
+                await fetch('/api/update-max-items', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ max_items: newMax })
+                });
+            } catch(e) {
+                console.warn('Could not persist max_items to server:', e);
+            }
+        }
+
+        function updateCounter() {
+            // selectedItems is the single source of truth — always in sync with server
+            const count = selectedItems.size;
+            // Sidebar counter
+            const counterEl = document.getElementById('counterNumber');
+            if (counterEl) counterEl.textContent = `${count} / ${maxItems}`;
+            // Cart FAB badge
+            const fab = document.getElementById('cartFabCount');
+            if (fab) { fab.textContent = count; fab.style.display = count > 0 ? 'block' : 'none'; }
+            // Cart total line (inside drawer)
+            const cartTotalEl = document.getElementById('cartTotal');
+            const cartMaxEl   = document.getElementById('cartMax');
+            if (cartTotalEl) cartTotalEl.textContent = count;
+            if (cartMaxEl)   cartMaxEl.textContent   = maxItems;
+            // Cart subtitle
+            const lang = window.currentLang || 'hi';
+            const sub  = lang === 'en' ? `${count} items selected` :
+                         lang === 'mr' ? `${count} पदार्थ निवडले` :
+                                         `${count} व्यंजन चयनित`;
+            const subtitleEl = document.getElementById('cartSubtitle');
+            if (subtitleEl) subtitleEl.textContent = sub;
+        }
+        
+        async function clearSelection() {
+            const lang = currentLang;
+            const msg  = lang === 'en' ? 'Clear all selected items?' :
+                         lang === 'mr' ? 'सर्व निवडलेले पदार्थ काढायचे?' :
+                                         'क्या आप सभी चयनित व्यंजन साफ़ करना चाहते हैं?';
+            if (!confirm(msg)) return;
+            const ids = [...selectedItems];       // snapshot before clear
+            // 1. Clear UI immediately
+            selectedItems.clear();
+            if (typeof cartItems !== 'undefined') cartItems = {};
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+            if (typeof renderCart === 'function') renderCart();
+            updateCounter();
+            // 2. Persist to server in background
+            if (ids.length) {
+                await Promise.all(ids.map(id =>
+                    fetch('/api/toggle-selection', {
+                        method: 'POST',
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify({food_id: id, action: 'remove'})
+                    }).catch(() => {})
+                ));
+            }
+        }
+        
+        function filterTable() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(searchText) ? '' : 'none';
+            });
+        }
+        
+        // ── Tab switching ─────────────────────────────────────────────
+        let currentTab = 'food';
+        let lastFoodData = null;
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            // Update nav tab active state
+            document.querySelectorAll('.nav-tab').forEach(t => {
+                t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+            });
+            // Show/hide main food layout vs tab panels
+            const mainContainer = document.querySelector('.main-container');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            if (tabName === 'food') {
+                mainContainer.style.display = '';
+                tabPanels.forEach(p => p.style.display = 'none');
+            } else {
+                mainContainer.style.display = 'none';
+                tabPanels.forEach(p => p.style.display = 'none');
+                const panel = document.getElementById('tab-panel-' + tabName);
+                if (panel) panel.style.display = '';
+                // Feed data into raw material tab when switching to it
+                if (tabName === 'rawmaterial' && typeof loadRawMaterialTab === 'function') {
+                    loadRawMaterialTab(lastFoodData || null);
+                }
+                if (tabName === 'shodhana' && typeof loadShodhanaTab === 'function') {
+                    loadShodhanaTab();
+                }
+                if (tabName === 'dryprep' && typeof loadDryPrepTab === 'function') {
+                    loadDryPrepTab();
+                }
+
+
+            }
+            // Re-apply language to newly visible content
+            applyLanguage(currentLang);
+        }
+
+        // ── Sub-tab switching (inside Food tab) ──────────────────────
+        let currentSubTab = 'recommendations';
+
+        // ── Date bar ─────────────────────────────────────────────
+        const _REC_MONTHS = {
+            hi:['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितम्बर','अक्तूबर','नवम्बर','दिसम्बर'],
+            en:['January','February','March','April','May','June','July','August','September','October','November','December'],
+            mr:['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर']
+        };
+        const _REC_DAYS = {
+            hi:['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'],
+            en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+            mr:['रविवार','सोमवार','मंगळवार','बुधवार','गुरुवार','शुक्रवार','शनिवार']
+        };
+        function updateRecDateBar() {
+            const el = document.getElementById('recDateBar');
+            if (!el) return;
+            const t = new Date(), lang = currentLang;
+            const m = _REC_MONTHS[lang]||_REC_MONTHS.hi;
+            const d = _REC_DAYS[lang]||_REC_DAYS.hi;
+            el.textContent = d[t.getDay()] + ', ' + t.getDate() + ' ' + m[t.getMonth()] + ' ' + t.getFullYear();
+        }
+
+        // ── Rasi restriction chips ────────────────────────────────
+        const RASI_MSGS = {
+            hari:   {hi:'🌿 आज हरी सब्जी एवं हरे फल परहेज करें।',   en:'🌿 Avoid green vegetables and fruits today.',          mr:'🌿 आज हिरव्या भाज्या आणि फळे टाळा.'},
+            meetha: {hi:'🍬 आज मीठा (गुड़, शक्कर) परहेज करें।',      en:'🍬 Avoid sweets and sugar today.',                    mr:'🍬 आज गोड पदार्थ टाळा.'},
+            ghee:   {hi:'🫙 आज घी परहेज करें।',                       en:'🫙 Avoid ghee today.',                                mr:'🫙 आज तूप टाळा.'},
+            doodh:  {hi:'🥛 आज दूध एवं दूध उत्पाद परहेज करें।',      en:'🥛 Avoid milk and dairy products today.',             mr:'🥛 आज दूध आणि दुग्धजन्य पदार्थ टाळा.'},
+            khatai: {hi:'🍋 आज दही, छाछ एवं खटाई परहेज करें।',      en:'🍋 Avoid curd, buttermilk and sour items today.',     mr:'🍋 आज दही, ताक आणि आंबट पदार्थ टाळा.'},
+            tel:    {hi:'🛢️ आज तेल परहेज करें।',                     en:'🛢️ Avoid oil in your meals today.',                  mr:'🛢️ आज तेल टाळा.'},
+            namak:  {hi:'🧂 आज नमक परहेज करें।',                     en:'🧂 Avoid salt in your meals today.',                  mr:'🧂 आज मीठ टाळा.'}
+        };
+        // Weekday default: 0=Sun→namak, 1=Mon→hari...
+        const DAY_DEFAULT_RASI = ['namak','hari','meetha','ghee','doodh','khatai','tel'];
+
+        // selectedRasi starts from preference (passed from server), then weekday default
+        let recSelectedRasi = new Set();
+
+        function initRasiChips() {
+            // Initialise from server preference (rasa is comma-separated)
+            const prefRasa = '{{ preference.rasa or "" }}';
+            if (prefRasa) {
+                prefRasa.split(',').forEach(v => { if(v.trim()) recSelectedRasi.add(v.trim()); });
+            }
+            // If nothing from preference, apply weekday default
+            if (recSelectedRasi.size === 0) {
+                recSelectedRasi.add(DAY_DEFAULT_RASI[new Date().getDay()]);
+            }
+            // Apply label text for current lang and set selected state
+            renderRasiChips();
+            updateRasiBanner();
+
+            // Wire clicks
+            document.querySelectorAll('#recRasiChips .rec-rasi-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const val = chip.getAttribute('data-val');
+                    if (recSelectedRasi.has(val)) {
+                        recSelectedRasi.delete(val);
+                        chip.classList.remove('selected');
+                    } else {
+                        recSelectedRasi.add(val);
+                        chip.classList.add('selected');
+                    }
+                    updateRasiBanner();
+                });
+            });
+        }
+
+        function renderRasiChips() {
+            // Update chip label text for current language + selected state
+            document.querySelectorAll('#recRasiChips .rec-rasi-chip').forEach(chip => {
+                const val  = chip.getAttribute('data-val');
+                const txt  = chip.getAttribute('data-' + currentLang) || chip.getAttribute('data-hi');
+                chip.textContent = txt;
+                chip.classList.toggle('selected', recSelectedRasi.has(val));
+            });
+        }
+
+        function updateRasiBanner() {
+            // Sidebar banner
+            const banner = document.getElementById('rasiRecBanner');
+            if (banner) {
+                if (recSelectedRasi.size === 0) {
+                    banner.classList.remove('visible');
+                    banner.textContent = '';
+                } else {
+                    const msgs = [];
+                    recSelectedRasi.forEach(val => {
+                        const m = RASI_MSGS[val];
+                        if (m) msgs.push(m[currentLang] || m.hi);
+                    });
+                    banner.textContent = msgs.join('  ');
+                    banner.classList.add('visible');
+                }
+            }
+            // Top-of-content banner
+            const topBanner = document.getElementById('recRestrictionBanner');
+            if (topBanner) {
+                if (recSelectedRasi.size === 0) {
+                    topBanner.classList.remove('visible');
+                } else {
+                    const lang = currentLang;
+                    const titleMap = { hi:'🚫 आज का परहेज:', en:"🚫 Today's Restrictions:", mr:'🚫 आजचे परहेज:' };
+                    const msgs = [];
+                    recSelectedRasi.forEach(val => {
+                        const m = RASI_MSGS[val];
+                        if (m) msgs.push(m[lang] || m.hi);
+                    });
+                    topBanner.innerHTML = `<button class="restriction-toast-close" onclick="document.getElementById('recRestrictionBanner').classList.remove('visible')" title="Close">✕</button><div class="rb-title">${titleMap[lang]||titleMap.hi}</div>${msgs.join('<br>')}`;
+                    topBanner.classList.add('visible');
+                }
+            }
+        }
+
+        function getRasiString() {
+            return Array.from(recSelectedRasi).join(',');
+        }
+        function switchSubTab(name) {
+            currentSubTab = name;
+            document.querySelectorAll('.sub-tab').forEach(t =>
+                t.classList.toggle('active', t.getAttribute('data-subtab') === name));
+            document.getElementById('sub-panel-recommendations').style.display = name === 'recommendations' ? '' : 'none';
+            document.getElementById('sub-panel-allfoods').style.display = name === 'allfoods' ? '' : 'none';
+            if (name === 'allfoods' && typeof loadAllFoods === 'function') loadAllFoods();
+            applyLanguage(currentLang);
+        }
+
+        // On page load: apply saved language then fetch data
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage(currentLang);
+            updateRecDateBar();
+            initRasiChips();
+            loadFoodData();
+        });
+    </script>
+
+    <!-- ============================================================
+         FLOATING CART — मेरा मेनू (E-commerce style)
+         ============================================================ -->
+    <div id="cartFab" onclick="toggleCart()" title="मेरा मेनू | My Menu">
+        🛒
+        <span id="cartFabCount">0</span>
+    </div>
+
+    <div id="cartDrawer">
+        <div class="cart-header">
+            <div>
+                <div class="cart-title">
+                    <span data-lang="hi">🛒 मेरा मेनू</span>
+                    <span data-lang="en" style="display:none;">🛒 My Menu</span>
+                    <span data-lang="mr" style="display:none;">🛒 माझी यादी</span>
+                </div>
+                <div class="cart-subtitle" id="cartSubtitle">0 items</div>
+            </div>
+            <button class="cart-close" onclick="toggleCart()">✕</button>
+        </div>
+
+        <div class="cart-body" id="cartBody">
+            <div class="cart-empty" id="cartEmpty">
+                <div style="font-size:2.5em;margin-bottom:12px;">🍽️</div>
+                <div data-lang="hi">अभी कोई व्यंजन नहीं चुना गया।<br>सिफारिशें पृष्ठ पर चेकबॉक्स से चुनें।</div>
+                <div data-lang="en" style="display:none;">No items selected yet.<br>Check items on the Recommendations page.</div>
+                <div data-lang="mr" style="display:none;">अद्याप काहीही निवडले नाही.<br>शिफारसी पृष्ठावर चेकबॉक्सने निवडा.</div>
+            </div>
+            <div id="cartItemsList"></div>
+        </div>
+
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="cart-total">
+                <span data-lang="hi">कुल: </span>
+                <span data-lang="en" style="display:none;">Total: </span>
+                <span data-lang="mr" style="display:none;">एकूण: </span>
+                <strong id="cartTotal">0</strong> /
+                <span id="cartMax">20</span>
+                <span data-lang="hi"> व्यंजन</span>
+                <span data-lang="en" style="display:none;"> items</span>
+                <span data-lang="mr" style="display:none;"> पदार्थ</span>
+            </div>
+            <div class="cart-actions">
+                <button class="cart-btn-print" onclick="cartPrint()">
+                    🖨️ <span data-lang="hi">प्रिंट</span><span data-lang="en" style="display:none;">Print</span><span data-lang="mr" style="display:none;">प्रिंट</span>
+                </button>
+                <button class="cart-btn-clear" onclick="cartClear()">
+                    🗑️ <span data-lang="hi">साफ़ करें</span><span data-lang="en" style="display:none;">Clear</span><span data-lang="mr" style="display:none;">साफ करा</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart print template (hidden) -->
+    <div id="cartPrintArea" style="display:none;">
+        <div style="font-family:'Noto Sans Devanagari',sans-serif;max-width:700px;margin:0 auto;padding:30px;">
+            <div style="display:flex;align-items:center;gap:16px;padding-bottom:16px;border-bottom:3px solid #1e3a8a;margin-bottom:20px;">
+                <span style="font-size:2.5em;">🌿</span>
+                <div>
+                    <h1 style="font-size:1.4em;color:#1e3a8a;margin:0 0 4px 0;">मेरा आयुर्वेदिक मेनू | My Ayurvedic Menu</h1>
+                    <p style="margin:0;font-size:0.85em;color:#666;">विद्या आहार औषधि — Ayurvedic Food Guidance</p>
+                    <p style="margin:4px 0 0;font-size:0.78em;color:#aaa;" id="cartPrintDate"></p>
+                </div>
+            </div>
+            <div id="cartPrintContent"></div>
+            <div style="margin-top:24px;padding-top:12px;border-top:1px solid #ddd;font-size:0.78em;color:#999;font-style:italic;">
+                यह सूची आयुर्वेदिक सिद्धांतों पर आधारित है। किसी भी आहार परिवर्तन से पहले अपने वैद्य से परामर्श लें।
+            </div>
+        </div>
+    </div>
+
+    <style>
+    /* ── Floating Cart Button ── */
+    #cartFab {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #1e3a8a, #4169e1);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4em;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(30,58,138,0.4);
+        z-index: 1000;
+        transition: transform 0.2s, box-shadow 0.2s;
+        line-height: 1;
+    }
+    #cartFab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(30,58,138,0.5); }
+    #cartFabCount {
+        font-size: 0.42em;
+        font-weight: 700;
+        background: #e53935;
+        border-radius: 10px;
+        padding: 1px 5px;
+        margin-top: 2px;
+        min-width: 18px;
+        text-align: center;
+        display: none;
+    }
+
+    /* ── Cart Drawer ── */
+    #cartDrawer {
+        position: fixed;
+        top: 0;
+        right: -420px;
+        width: 400px;
+        height: 100vh;
+        background: white;
+        box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        transition: right 0.3s cubic-bezier(.4,0,.2,1);
+        font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+    #cartDrawer.open { right: 0; }
+
+    .cart-header {
+        background: linear-gradient(135deg, #1e3a8a, #4169e1);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+    }
+    .cart-title    { font-size: 1.1em; font-weight: 700; }
+    .cart-subtitle { font-size: 0.82em; opacity: 0.85; margin-top: 3px; }
+    .cart-close {
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .cart-close:hover { background: rgba(255,255,255,0.35); }
+
+    .cart-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+    }
+    .cart-empty {
+        text-align: center;
+        padding: 50px 24px;
+        color: #aaa;
+        font-size: 0.9em;
+        line-height: 1.7;
+    }
+
+    /* Group header inside cart */
+    .cart-group-header {
+        background: #f0f4ff;
+        padding: 8px 16px;
+        font-size: 0.8em;
+        font-weight: 700;
+        color: #3949ab;
+        border-bottom: 1px solid #e8eaf6;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    /* Individual cart item row */
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 16px;
+        border-bottom: 1px solid #f5f5f5;
+        transition: background 0.15s;
+    }
+    .cart-item:hover { background: #fafbff; }
+    .cart-item-name {
+        flex: 1;
+        font-size: 0.9em;
+        color: #333;
+        font-weight: 500;
+    }
+    .cart-item-type {
+        font-size: 0.75em;
+        color: #aaa;
+        margin-left: 6px;
+    }
+    .cart-item-remove {
+        background: none;
+        border: none;
+        color: #e53935;
+        cursor: pointer;
+        font-size: 1em;
+        padding: 4px 6px;
+        border-radius: 4px;
+        opacity: 0.6;
+        transition: opacity 0.15s, background 0.15s;
+    }
+    .cart-item-remove:hover { opacity: 1; background: #ffebee; }
+
+    /* Footer */
+    .cart-footer {
+        border-top: 2px solid #e0e0e0;
+        padding: 16px;
+        flex-shrink: 0;
+        background: white;
+    }
+    .cart-total {
+        text-align: center;
+        font-size: 0.9em;
+        color: #555;
+        margin-bottom: 12px;
+    }
+    .cart-total strong { font-size: 1.2em; color: #1e3a8a; }
+    .cart-actions { display: flex; gap: 8px; }
+    .cart-btn-print, .cart-btn-clear {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.88em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .cart-btn-print { background: #1e3a8a; color: white; }
+    .cart-btn-clear { background: white; color: #c62828; border: 2px solid #c62828; }
+    .cart-btn-print:hover, .cart-btn-clear:hover { opacity: 0.85; }
+
+    /* Overlay when cart is open */
+    #cartOverlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 1999;
+    }
+    #cartOverlay.show { display: block; }
+
+    @media print {
+        #cartFab, #cartDrawer, #cartOverlay { display: none !important; }
+        #cartPrintArea { display: block !important; }
+        body > *:not(#cartPrintArea) { display: none !important; }
+    }
+    @media(max-width:480px) {
+        #cartDrawer { width: 100vw; right: -100vw; }
+    }
+    </style>
+
+    <div id="cartOverlay" onclick="toggleCart()"></div>
+
+    <script>
+    // ── Cart State ─────────────────────────────────────────────────
+    let cartItems = {};   // { foodId: { name, type } }
+
+    function toggleCart() {
+        document.getElementById('cartDrawer').classList.toggle('open');
+        document.getElementById('cartOverlay').classList.toggle('show');
+    }
+
+    // typeDisplayNames — loaded from food_types for icon+label lookup
+    const TYPE_LABELS = {
+        hi: { fruit:'फल', fruit_juice:'फलों का रस', vegetable:'सब्जी', leafy_veg:'पत्तेदार सब्जी',
+              grain:'अन्न', pulse:'दाल', spice:'मसाला', dry_fruit:'सूखे मेवे', dairy:'दूध उत्पाद',
+              oil:'तेल', sweetener:'मीठा', beverage:'पेय', soup:'सूप', roti:'रोटी',
+              nashta:'नाश्ता', sweet:'मीठे व्यंजन', other:'अन्य' },
+        en: { fruit:'Fruit', fruit_juice:'Fruit Juice', vegetable:'Vegetable', leafy_veg:'Leafy Vegetable',
+              grain:'Grain', pulse:'Pulse', spice:'Spice', dry_fruit:'Dry Fruit', dairy:'Dairy',
+              oil:'Oil', sweetener:'Sweetener', beverage:'Beverage', soup:'Soup', roti:'Roti / Bread',
+              nashta:'Snacks', sweet:'Sweet Dishes', other:'Other' },
+        mr: { fruit:'फळे', fruit_juice:'फळांचा रस', vegetable:'भाजी', leafy_veg:'पालेभाजी',
+              grain:'धान्य', pulse:'डाळ', spice:'मसाला', dry_fruit:'सुके मेवे', dairy:'दुग्धजन्य',
+              oil:'तेल', sweetener:'गोड पदार्थ', beverage:'पेय', soup:'सूप', roti:'रोटी/भाकरी',
+              nashta:'नाश्ता', sweet:'गोड व्यंजन', other:'इतर' }
+    };
+
+    function cartAddItem(foodId, name, typeCode) {
+        // typeCode is the food_type code (e.g. 'fruit'), name is display name
+        cartItems[foodId] = { name, typeCode: typeCode || 'other' };
+        renderCart();
+    }
+
+    function cartRemoveItem(foodId) {
+        const id = parseInt(foodId);
+        // Immediately update both stores (optimistic)
+        delete cartItems[id];   // int key
+        if (window.selectedItems) window.selectedItems.delete(id);
+        renderCart();
+        updateCounter();
+        // Uncheck checkbox if visible
+        const cb = document.querySelector(`input[type=checkbox][value="${foodId}"]`);
+        if (cb) cb.checked = false;
+        // Persist to server
+        fetch('/api/toggle-selection', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({food_id: id, action:'remove'})
+        }).catch(e => console.error('Remove failed:', e));
+    }
+
+    function renderCart() {
+        const items = Object.entries(cartItems);
+        const count = items.length;
+
+        const empty   = document.getElementById('cartEmpty');
+        const list    = document.getElementById('cartItemsList');
+        const footer  = document.getElementById('cartFooter');
+
+        if (count === 0) {
+            empty.style.display = '';
+            list.innerHTML = '';
+            footer.style.display = 'none';
+            return;
+        }
+        empty.style.display = 'none';
+        footer.style.display = '';
+
+        // Group by typeCode
+        const TYPE_ICONS = {
+            fruit:'🍎', fruit_juice:'🥤', vegetable:'🥦', leafy_veg:'🥬', grain:'🌾',
+            pulse:'🫘', spice:'🌿', dry_fruit:'🥜', dairy:'🥛', oil:'🫙',
+            sweetener:'🍯', beverage:'☕', soup:'🍲', roti:'🫓', nashta:'🍘', sweet:'🍮', other:'🍽️'
+        };
+        const lang = window.currentLang || 'hi';
+        const labelMap = TYPE_LABELS[lang] || TYPE_LABELS.hi;
+        const groups = {};
+        items.forEach(([id, item]) => {
+            const code = item.typeCode || item.type || 'other';
+            if (!groups[code]) groups[code] = [];
+            groups[code].push({id, ...item});
+        });
+
+        list.innerHTML = Object.entries(groups).map(([code, grpItems]) => {
+            const icon  = TYPE_ICONS[code] || '🍽️';
+            const label = labelMap[code]   || code;
+            return `<div class="cart-group-header">${icon} ${label}</div>
+            ${grpItems.map(item => `
+                <div class="cart-item">
+                    <span class="cart-item-name">${item.name}</span>
+                    <button class="cart-item-remove" onclick="cartRemoveItem('${item.id}')" title="Remove">✕</button>
+                </div>
+            `).join('')}`;
+        }).join('');
+    }
+
+    async function cartClear() {
+        const lang = window.currentLang || 'hi';
+        const msg = lang === 'en' ? 'Clear all items from menu?' :
+                    lang === 'mr' ? 'मेनूतील सर्व पदार्थ काढायचे?' :
+                                    'मेनू से सभी व्यंजन हटाएं?';
+        if (!confirm(msg)) return;
+        const ids = Object.keys(cartItems).map(Number);
+        // Clear UI immediately
+        cartItems = {};
+        if (window.selectedItems) window.selectedItems.clear();
+        renderCart();
+        updateCounter();
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+        // Persist all removes to server in parallel
+        await Promise.all(ids.map(id =>
+            fetch('/api/toggle-selection', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({food_id: id, action: 'remove'})
+            })
+        ));
+    }
+
+    function cartPrint() {
+        document.getElementById('cartPrintDate').textContent =
+            new Date().toLocaleDateString('hi-IN', {year:'numeric',month:'long',day:'numeric'});
+        const lang     = window.currentLang || 'hi';
+        const labelMap = TYPE_LABELS[lang] || TYPE_LABELS.hi;
+        const iconMap  = {fruit:'🍎',fruit_juice:'🥤',vegetable:'🥦',leafy_veg:'🥬',grain:'🌾',
+                          pulse:'🫘',spice:'🌿',dry_fruit:'🥜',dairy:'🥛',oil:'🫙',
+                          sweetener:'🍯',beverage:'☕',soup:'🍲',roti:'🫓',nashta:'🍘',sweet:'🍮',other:'🍽️'};
+        const items = Object.values(cartItems);
+        const groups = {};
+        items.forEach(item => {
+            const code = item.typeCode || item.type || 'other';
+            if (!groups[code]) groups[code] = [];
+            groups[code].push(item.name);
+        });
+        document.getElementById('cartPrintContent').innerHTML =
+            Object.entries(groups).map(([code, names]) => {
+                const label = labelMap[code] || code;
+                const icon  = iconMap[code]  || '🍽️';
+                return `
+                <div style="margin-bottom:16px;">
+                    <div style="background:#1e3a8a;color:white;padding:8px 14px;border-radius:6px 6px 0 0;font-weight:700;">
+                        ${icon} ${label} (${names.length})
+                    </div>
+                    <table style="width:100%;border-collapse:collapse;border:1px solid #e0e0e0;border-top:none;">
+                        ${names.map((n,i) => `<tr>
+                            <td style="padding:7px 14px;border-bottom:1px solid #f0f0f0;width:36px;color:#aaa;">${i+1}</td>
+                            <td style="padding:7px 14px;border-bottom:1px solid #f0f0f0;">${n}</td>
+                        </tr>`).join('')}
+                    </table>
+                </div>
+            `}).join('');
+        window.print();
+    }
+
+    // Hook into the existing toggleFood so adding/removing a checkbox
+    // also updates the cart
+    const _origToggleFood = window.toggleFood;
+    </script>
+
+</body>
+</html>
