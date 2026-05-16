@@ -12,6 +12,9 @@ from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # Initialize Flask app
 app = Flask(__name__)

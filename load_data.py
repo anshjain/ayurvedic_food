@@ -9,7 +9,9 @@
 
 from app import app, db
 from app import Season, Disease, Taste, FoodType, FoodItem, AdminUser
+import sys
 
+sys.stdout.reconfigure(encoding='utf-8')
 
 def seed_admin():
     if AdminUser.query.filter_by(username='admin').first():
