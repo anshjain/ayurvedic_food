@@ -1,0 +1,645 @@
+<!-- File: templates/index.html -->
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍃 भोजन सिफारिशें | Food Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 45px;
+        }
+        @media(max-width:600px) {
+            .idx-tab { padding: 10px 14px; font-size:0.88em; }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .form-section {
+            background: linear-gradient(to bottom, #f8f9fa, #fff);
+            padding: 35px;
+            border-radius: 15px;
+            border: 3px solid #667eea;
+        }
+        
+        .language-toggle {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn:hover {
+            background: #f0f4ff;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 28px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        label {
+            display: block;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1.15em;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            padding: 18px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .radio-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 12px 18px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .radio-option:hover {
+            background: #f0f4ff;
+            border-color: #667eea;
+        }
+        
+        .radio-option input[type="radio"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #495057;
+        }
+        
+        select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .required {
+            color: #dc3545;
+            margin-left: 5px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.4em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 35px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 35px rgba(102, 126, 234, 0.6);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .info-note {
+            background: linear-gradient(135deg, #e3f2fd, #fff);
+            border-left: 5px solid #2196f3;
+            padding: 18px;
+            border-radius: 10px;
+            margin-top: 25px;
+            font-size: 0.95em;
+            color: #01579b;
+            line-height: 1.6;
+        }
+        
+        .info-note strong {
+            color: #0277bd;
+        }
+        
+        /* ── Rasi checkboxes ── */
+        .rasi-banner {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85em;
+            color: #c2410c;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .rasi-banner.visible { display: block; }
+        .rasi-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .rasi-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #f8f9ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 20px;
+            padding: 7px 14px;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 0.88em;
+            user-select: none;
+        }
+        .rasi-chip:hover { border-color: #4169e1; background: #eef2ff; }
+        .rasi-chip input[type="checkbox"] { display: none; }
+        .rasi-chip.selected {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+            font-weight: 700;
+        }
+        .rasi-chip.selected::before { content: "✕ "; }
+
+        .header-date {
+            font-size: 0.88em;
+            opacity: 0.88;
+            margin-top: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+            
+            .form-section {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ── HEADER ─────────────────────────── -->
+        <div class="header">
+            <h1>🍃 <span data-lang="hi">भोजन सिफारिशें</span><span data-lang="en" style="display:none;">Food Recommendations</span><span data-lang="mr" style="display:none;">अन्न शिफारसी</span></h1>
+            <p><span data-lang="hi">आयुर्वेदिक आहार मार्गदर्शन प्रणाली</span><span data-lang="en" style="display:none;">Ayurvedic Food Guidance System</span><span data-lang="mr" style="display:none;">आयुर्वेदिक अन्न मार्गदर्शन प्रणाली</span></p>
+            <div id="dateBar" class="header-date"></div>
+        </div>
+        
+        <div class="language-toggle">
+            <button class="lang-btn active" onclick="changeLanguage('hi')">हिन्दी</button>
+            <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+            <button class="lang-btn" onclick="changeLanguage('mr')">मराठी</button>
+        </div>
+        
+        <form method="POST" action="/submit" class="form-section">
+            <input type="hidden" id="language-input" name="language" value="hi">
+            
+            <div class="form-group">
+                <label><span data-lang="hi">किसके लिए</span><span data-lang="en" style="display:none;">For Whom</span><span data-lang="mr" style="display:none;">कोणासाठी</span></label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="vrati" name="for_whom" value="vrati" checked>
+                        <label for="vrati"><span data-lang="hi">व्रती</span><span data-lang="en" style="display:none;">Fasting</span><span data-lang="mr" style="display:none;">उपवास</span></label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="swayam" name="for_whom" value="swayam">
+                        <label for="swayam"><span data-lang="hi">स्वयं</span><span data-lang="en" style="display:none;">Self</span><span data-lang="mr" style="display:none;">स्वतः</span></label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="ritu"><span data-lang="hi">ऋतु के अनुसार</span><span data-lang="en" style="display:none;">By Season</span><span data-lang="mr" style="display:none;">ऋतूनुसार</span><span class="required">*</span></label>
+                <select id="ritu" name="ritu" required>
+                    <option value=""
+                        data-hi="-- ऋतु चुनें --"
+                        data-en="-- Select Season --"
+                        data-mr="-- ऋतू निवडा --">-- ऋतु चुनें --</option>
+                    <option value="margshirsh"
+                        data-hi="मार्गशीर्ष (Nov-Dec)"
+                        data-en="Margshirsh (Nov-Dec)"
+                        data-mr="मार्गशीर्ष (Nov-Dec)">मार्गशीर्ष (Nov-Dec)</option>
+                    <option value="paush"
+                        data-hi="पौष (Dec-Jan)"
+                        data-en="Paush (Dec-Jan)"
+                        data-mr="पौष (Dec-Jan)">पौष (Dec-Jan)</option>
+                    <option value="magh"
+                        data-hi="माघ (Jan-Feb)"
+                        data-en="Magh (Jan-Feb)"
+                        data-mr="माघ (Jan-Feb)">माघ (Jan-Feb)</option>
+                    <option value="phalgun"
+                        data-hi="फाल्गुन (Feb-Mar)"
+                        data-en="Phalgun (Feb-Mar)"
+                        data-mr="फाल्गुन (Feb-Mar)">फाल्गुन (Feb-Mar)</option>
+                    <option value="chaitra"
+                        data-hi="चैत्र (Mar-Apr)"
+                        data-en="Chaitra (Mar-Apr)"
+                        data-mr="चैत्र (Mar-Apr)">चैत्र (Mar-Apr)</option>
+                    <option value="vaishakh"
+                        data-hi="वैशाख (Apr-May)"
+                        data-en="Vaishakh (Apr-May)"
+                        data-mr="वैशाख (Apr-May)">वैशाख (Apr-May)</option>
+                    <option value="jyeshtha"
+                        data-hi="ज्येष्ठ (May-Jun)"
+                        data-en="Jyeshtha (May-Jun)"
+                        data-mr="ज्येष्ठ (May-Jun)">ज्येष्ठ (May-Jun)</option>
+                    <option value="ashadh"
+                        data-hi="आषाढ़ (Jun-Jul)"
+                        data-en="Ashadh (Jun-Jul)"
+                        data-mr="आषाढ (Jun-Jul)">आषाढ़ (Jun-Jul)</option>
+                    <option value="shravan"
+                        data-hi="श्रावण (Jul-Aug)"
+                        data-en="Shravan (Jul-Aug)"
+                        data-mr="श्रावण (Jul-Aug)">श्रावण (Jul-Aug)</option>
+                    <option value="bhadrapad"
+                        data-hi="भाद्रपद (Aug-Sep)"
+                        data-en="Bhadrapad (Aug-Sep)"
+                        data-mr="भाद्रपद (Aug-Sep)">भाद्रपद (Aug-Sep)</option>
+                    <option value="ashwin"
+                        data-hi="आश्विन (Sep-Oct)"
+                        data-en="Ashwin (Sep-Oct)"
+                        data-mr="आश्विन (Sep-Oct)">आश्विन (Sep-Oct)</option>
+                    <option value="kartik"
+                        data-hi="कार्तिक (Oct-Nov)"
+                        data-en="Kartik (Oct-Nov)"
+                        data-mr="कार्तिक (Oct-Nov)">कार्तिक (Oct-Nov)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="bimari"><span data-lang="hi">बीमारी के अनुसार</span><span data-lang="en" style="display:none;">By Disease</span><span data-lang="mr" style="display:none;">आजारानुसार</span></label>
+                <select id="bimari" name="bimari">
+                    <option value=""
+                        data-hi="कोई नहीं"
+                        data-en="None"
+                        data-mr="काहीही नाही">कोई नहीं</option>
+                    <option value="fever"
+                        data-hi="बुखार"
+                        data-en="Fever"
+                        data-mr="ताप">बुखार</option>
+                    <option value="cold"
+                        data-hi="सर्दी-जुकाम"
+                        data-en="Cold"
+                        data-mr="सर्दी">सर्दी-जुकाम</option>
+                    <option value="cough"
+                        data-hi="खांसी"
+                        data-en="Cough"
+                        data-mr="खोकला">खांसी</option>
+                    <option value="diabetes"
+                        data-hi="मधुमेह"
+                        data-en="Diabetes"
+                        data-mr="मधुमेह">मधुमेह</option>
+                    <option value="bp"
+                        data-hi="उच्च रक्तचाप"
+                        data-en="High BP"
+                        data-mr="उच्च रक्तदाब">उच्च रक्तचाप</option>
+                    <option value="acidity"
+                        data-hi="एसिडिटी"
+                        data-en="Acidity"
+                        data-mr="आम्लपित्त">एसिडिटी</option>
+                </select>
+            </div>
+            
+            <!-- Rasi / Taste restriction field -->
+            <div class="form-group">
+                <label>
+                    <span data-lang="hi">आज क्या परहेज करें (रासी)</span>
+                    <span data-lang="en" style="display:none;">Today's Restriction (Rasi)</span>
+                    <span data-lang="mr" style="display:none;">आजचे परहेज (रासी)</span>
+                </label>
+                <!-- Weekday default notice -->
+                <div id="rasiBanner" class="rasi-banner"></div>
+                <!-- Multi-select checkboxes -->
+                <div class="rasi-grid" id="rasiGrid">
+                    <label class="rasi-chip" data-val="hari">
+                        <input type="checkbox" name="rasa" value="hari" id="rasi-hari">
+                        <span class="rasi-label" data-hi="🌿 हरी (सब्जी)" data-en="🌿 Hari (Green Veg)" data-mr="🌿 हरी (भाजी)">🌿 हरी (सब्जी)</span>
+                    </label>
+                    <label class="rasi-chip" data-val="meetha">
+                        <input type="checkbox" name="rasa" value="meetha" id="rasi-meetha">
+                        <span class="rasi-label" data-hi="🍬 मीठा (Sweet)" data-en="🍬 Meetha (Sweet)" data-mr="🍬 गोड (Meetha)">🍬 मीठा (Sweet)</span>
+                    </label>
+                    <label class="rasi-chip" data-val="ghee">
+                        <input type="checkbox" name="rasa" value="ghee" id="rasi-ghee">
+                        <span class="rasi-label" data-hi="🫙 घी" data-en="🫙 Ghee" data-mr="🫙 तूप (Ghee)">🫙 घी</span>
+                    </label>
+                    <label class="rasi-chip" data-val="doodh">
+                        <input type="checkbox" name="rasa" value="doodh" id="rasi-doodh">
+                        <span class="rasi-label" data-hi="🥛 दूध (Milk)" data-en="🥛 Doodh (Milk)" data-mr="🥛 दूध (Milk)">🥛 दूध (Milk)</span>
+                    </label>
+                    <label class="rasi-chip" data-val="khatai">
+                        <input type="checkbox" name="rasa" value="khatai" id="rasi-khatai">
+                        <span class="rasi-label" data-hi="🍋 दही/खटाई (Sour)" data-en="🍋 Dahi/Khatai (Sour)" data-mr="🍋 दही/आंबट (Sour)">🍋 दही/खटाई (Sour)</span>
+                    </label>
+                    <label class="rasi-chip" data-val="tel">
+                        <input type="checkbox" name="rasa" value="tel" id="rasi-tel">
+                        <span class="rasi-label" data-hi="🛢️ तेल (Oil)" data-en="🛢️ Tel (Oil)" data-mr="🛢️ तेल (Oil)">🛢️ तेल (Oil)</span>
+                    </label>
+                    <label class="rasi-chip" data-val="namak">
+                        <input type="checkbox" name="rasa" value="namak" id="rasi-namak">
+                        <span class="rasi-label" data-hi="🧂 नमक (Salt)" data-en="🧂 Namak (Salt)" data-mr="🧂 मीठ (Salt)">🧂 नमक (Salt)</span>
+                    </label>
+                </div>
+                <!-- Hidden field to submit rasi values -->
+                <input type="hidden" name="rasa" id="rasiHidden" value="">
+            </div>
+            
+            <div class="form-group">
+                <label for="max_items"><span data-lang="hi">अधिकतम व्यंजन</span><span data-lang="en" style="display:none;">Maximum Items</span><span data-lang="mr" style="display:none;">कमाल पदार्थ</span></label>
+                <select id="max_items" name="max_items">
+                    <option value="15">15</option>
+                    <option value="20" selected>20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <span data-lang="hi">सिफारिशें प्राप्त करें</span>
+                <span data-lang="en" style="display:none;">Get Recommendations</span>
+                <span data-lang="mr" style="display:none;">शिफारसी मिळवा</span>
+            </button>
+            
+            <div class="info-note">
+                <strong>📝 <span data-lang="hi">नोट:</span><span data-lang="en" style="display:none;">Note:</span><span data-lang="mr" style="display:none;">टीप:</span></strong> 
+                <span data-lang="hi">व्रत के लिए केवल व्रत-उपयुक्त आहार दिखाए जाएंगे (साबूदाना, कुट्टू, सिंघाड़ा, फल, दूध आदि)। स्वयं के लिए सभी आहार विकल्प उपलब्ध होंगे।</span>
+                <span data-lang="en" style="display:none;">For fasting, only fasting-suitable foods will be shown (sabudana, buckwheat, water chestnut, fruits, milk, etc.). For self, all food options will be available.</span>
+                <span data-lang="mr" style="display:none;">उपवासासाठी फक्त उपवास-योग्य अन्न दाखवले जातील (साबूदाणा, कुट्टू, शिंगाडा, फळे, दूध इ.). स्वतःसाठी सर्व अन्न पर्याय उपलब्ध असतील.</span>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        let currentLang = 'hi';
+        
+function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all language span elements
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show selected language span elements
+            document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+                el.style.display = '';
+            });
+
+            // Update dropdown option text using data attributes
+            document.querySelectorAll('option[data-hi]').forEach(opt => {
+                const text = opt.getAttribute(`data-${lang}`) || opt.getAttribute('data-hi');
+                opt.textContent = text;
+            });
+
+            // Keep hidden input in sync so the selected language is submitted
+            const langInput = document.getElementById('language-input');
+            if (langInput) langInput.value = lang;
+        }
+    </script>
+
+    <script>
+    (function(){
+        var today = new Date();
+        var DOW = today.getDay(); // 0=Sun,1=Mon,...,6=Sat
+
+        // ── Date bar ─────────────────────────────────────────────
+        var MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        var MONTHS_HI = ['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितम्बर','अक्तूबर','नवम्बर','दिसम्बर'];
+        var DAYS_HI   = ['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
+        var MONTHS_MR = ['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर'];
+        var DAYS_MR   = ['रविवार','सोमवार','मंगळवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
+        var DAYS_EN   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+        function updateDateBar() {
+            var lang = window.currentLang || 'hi';
+            var d = today.getDate(), m = today.getMonth(), y = today.getFullYear();
+            var txt = lang === 'en'
+                ? DAYS_EN[DOW] + ', ' + d + ' ' + MONTHS_EN[m] + ' ' + y
+                : lang === 'mr'
+                ? DAYS_MR[DOW] + ', ' + d + ' ' + MONTHS_MR[m] + ' ' + y
+                : DAYS_HI[DOW] + ', ' + d + ' ' + MONTHS_HI[m] + ' ' + y;
+            var el = document.getElementById('dateBar');
+            if (el) el.textContent = txt;
+        }
+
+        // ── Rasi (Taste Restriction) ──────────────────────────────
+        // Weekday default: 0=Sun→namak, 1=Mon→hari, 2=Tue→meetha,
+        //                  3=Wed→ghee, 4=Thu→doodh, 5=Fri→khatai, 6=Sat→tel
+        var DAY_DEFAULT_RASI = ['namak','hari','meetha','ghee','doodh','khatai','tel'];
+
+        var RASI_MSG = {
+            hari:   { hi:'🌿 आज हरी सब्जी एवं हरे फल परहेज करें।', en:'🌿 Avoid green vegetables and green fruits today.', mr:'🌿 आज हिरव्या भाज्या आणि हिरवी फळे टाळा.' },
+            meetha: { hi:'🍬 आज मीठा (मिठाई, गुड़, शक्कर) परहेज करें।', en:'🍬 Avoid sweets, jaggery and sugar today.', mr:'🍬 आज गोड पदार्थ (मिठाई, गूळ, साखर) टाळा.' },
+            ghee:   { hi:'🫙 आज घी परहेज करें।', en:'🫙 Avoid ghee today.', mr:'🫙 आज तूप टाळा.' },
+            doodh:  { hi:'🥛 आज दूध एवं दूध उत्पाद परहेज करें।', en:'🥛 Avoid milk and milk products today.', mr:'🥛 आज दूध आणि दुग्धजन्य पदार्थ टाळा.' },
+            khatai: { hi:'🍋 आज दही, छाछ एवं खटाई परहेज करें।', en:'🍋 Avoid curd, buttermilk and sour items today.', mr:'🍋 आज दही, ताक आणि आंबट पदार्थ टाळा.' },
+            tel:    { hi:'🛢️ आज तेल परहेज करें।', en:'🛢️ Avoid oil in your meals today.', mr:'🛢️ आज तेल टाळा.' },
+            namak:  { hi:'🧂 आज नमक परहेज करें।', en:'🧂 Avoid salt in your meals today.', mr:'🧂 आज मीठ टाळा.' }
+        };
+
+        // Track selected rasi values
+        var selectedRasi = new Set();
+
+        function initRasi() {
+            // Auto-select today's default rasi
+            var defaultRasi = DAY_DEFAULT_RASI[DOW];
+            toggleRasi(defaultRasi, true);
+            updateRasiBanner();
+
+            // Wire up chip clicks — chips are <label> elements with data-val
+            document.querySelectorAll('.rasi-chip').forEach(function(chip) {
+                chip.addEventListener('click', function(e) {
+                    e.preventDefault(); // prevent double-fire from label+input
+                    var val = chip.getAttribute('data-val');
+                    if (!val) return;
+                    if (selectedRasi.has(val)) {
+                        toggleRasi(val, false);
+                    } else {
+                        toggleRasi(val, true);
+                    }
+                    updateRasiBanner();
+                    updateRasiHidden();
+                });
+            });
+
+            updateRasiHidden();
+        }
+
+        function toggleRasi(val, on) {
+            // Find chip by data-val attribute
+            var chip  = document.querySelector('.rasi-chip[data-val="' + val + '"]');
+            var input = chip && chip.querySelector('input[type="checkbox"]');
+            if (!chip) return;
+            if (on) {
+                selectedRasi.add(val);
+                chip.classList.add('selected');
+                if (input) { input.checked = true; }
+            } else {
+                selectedRasi.delete(val);
+                chip.classList.remove('selected');
+                if (input) { input.checked = false; }
+            }
+        }
+
+        function updateRasiBanner(forceLang) {
+            var banner = document.getElementById('rasiBanner');
+            if (!banner) return;
+            var lang = forceLang || window.currentLang || 'hi';
+            if (selectedRasi.size === 0) {
+                banner.classList.remove('visible');
+                banner.textContent = '';
+                return;
+            }
+            var msgs = [];
+            selectedRasi.forEach(function(val) {
+                if (RASI_MSG[val]) msgs.push(RASI_MSG[val][lang] || RASI_MSG[val].hi);
+            });
+            banner.textContent = msgs.join('  |  ');
+            banner.classList.add('visible');
+        }
+
+        function updateRasiHidden() {
+            var hidden = document.getElementById('rasiHidden');
+            if (hidden) hidden.value = Array.from(selectedRasi).join(',');
+        }
+
+        // ── Init ──────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateBar();
+            initRasi();
+            autoSelectSeason();
+        });
+
+        function autoSelectSeason() {
+            var monthToRitu = {
+                0:'magh', 1:'phalgun', 2:'chaitra', 3:'vaishakh',
+                4:'jyeshtha', 5:'ashadh', 6:'shravan', 7:'bhadrapad',
+                8:'ashwin', 9:'kartik', 10:'margshirsh', 11:'paush'
+            };
+            var currentMonth = today.getMonth();
+            var currentRitu  = monthToRitu[currentMonth];
+            var sel = document.getElementById('ritu');
+            // Only auto-select if user hasn't already chosen (value is empty or default)
+            if (sel && (!sel.value || sel.value === '')) {
+                sel.value = currentRitu;
+            }
+        }
+
+        // Hook into language change
+        var _origCL = window.changeLanguage;
+        window.changeLanguage = function(lang) {
+            if (_origCL) _origCL.call(this, lang);
+            updateDateBar();
+            updateRasiBanner(lang);  // pass lang directly so banner uses new language immediately
+        };
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!-- File: templates/tabs/all_foods.html -->
+<div class="tab-content-inner" id="tab-all-foods">
+
+    <!-- Page Header -->
+    <div class="af-page-header">
+        <span class="af-header-icon">📋</span>
+        <div>
+            <h2 data-lang="hi">सभी खाद्य पदार्थ | All Food Items</h2>
+            <h2 data-lang="en" style="display:none;">All Food Items | सभी खाद्य पदार्थ</h2>
+            <h2 data-lang="mr" style="display:none;">सर्व अन्न पदार्थ | All Food Items</h2>
+            <p data-lang="hi">यह सूची केवल जानकारी के लिए है। व्यंजन चुनने के लिए "सिफारिशें" पृष्ठ पर जाएं।</p>
+            <p data-lang="en" style="display:none;">This list is for reference only. Go to "Recommendations" page to select food items.</p>
+            <p data-lang="mr" style="display:none;">ही यादी केवळ माहितीसाठी आहे. पदार्थ निवडण्यासाठी "शिफारसी" पृष्ठावर जा.</p>
+        </div>
+    </div>
+
+    <!-- Filters Row -->
+    <div class="af-filters">
+        <div class="af-search-box">
+            <span>🔍</span>
+            <input type="text" id="afSearch" placeholder="व्यंजन खोजें... / Search..." oninput="afFilter()">
+        </div>
+        <select id="afTypeF" onchange="afFilter()">
+            <option value="" data-hi="-- सभी श्रेणी --" data-en="-- All Categories --" data-mr="-- सर्व श्रेणी --">-- सभी श्रेणी --</option>
+        </select>
+        <select id="afSubCatF" onchange="afFilter()">
+            <option value="" data-hi="-- सभी उप-श्रेणी --" data-en="-- All Sub-cats --" data-mr="-- सर्व उप-श्रेणी --">-- सभी उप-श्रेणी --</option>
+        </select>
+        <select id="afCatF" onchange="afFilter()">
+            <option value="" data-hi="-- वर्ग --" data-en="-- Class --" data-mr="-- वर्ग --">-- वर्ग --</option>
+            <option value="eat"      data-hi="✅ खाएं"     data-en="✅ Eat"       data-mr="✅ खा">✅ खाएं</option>
+            <option value="less_eat" data-hi="⚠️ कम खाएं" data-en="⚠️ Less Eat" data-mr="⚠️ कमी खा">⚠️ कम खाएं</option>
+            <option value="dont_eat" data-hi="❌ न खाएं"  data-en="❌ Don't Eat" data-mr="❌ खाऊ नका">❌ न खाएं</option>
+        </select>
+        <select id="afVratF" onchange="afFilter()">
+            <option value="" data-hi="-- व्रत --" data-en="-- Fasting --" data-mr="-- व्रत --">-- व्रत --</option>
+            <option value="yes" data-hi="🙏 व्रत योग्य" data-en="🙏 Vrat" data-mr="🙏 व्रत योग्य">🙏 व्रत योग्य</option>
+            <option value="no"  data-hi="🍽️ सामान्य"   data-en="🍽️ Regular" data-mr="🍽️ सामान्य">🍽️ सामान्य</option>
+        </select>
+        <div class="af-count" id="afCount"></div>
+    </div>
+
+    <!-- Table — matches screenshot exactly -->
+    <div class="af-table-wrap">
+        <table class="af-table" id="afTable">
+            <thead>
+                <tr>
+                    <th class="col-idx">
+                        <span data-lang="hi">क्रमांक</span>
+                        <span data-lang="en" style="display:none;">#</span>
+                        <span data-lang="mr" style="display:none;">क्रमांक</span>
+                    </th>
+                    <th class="col-name">
+                        <span data-lang="hi">व्यंजन | Item</span>
+                        <span data-lang="en" style="display:none;">Item | व्यंजन</span>
+                        <span data-lang="mr" style="display:none;">पदार्थ | Item</span>
+                    </th>
+                    <th class="col-cat">
+                        <span data-lang="hi">श्रेणी | Category</span>
+                        <span data-lang="en" style="display:none;">Category | श्रेणी</span>
+                        <span data-lang="mr" style="display:none;">श्रेणी | Category</span>
+                    </th>
+                    <th class="col-subcat">
+                        <span data-lang="hi">उप-श्रेणी | Subcategory</span>
+                        <span data-lang="en" style="display:none;">Subcategory | उप-श्रेणी</span>
+                        <span data-lang="mr" style="display:none;">उप-श्रेणी | Subcategory</span>
+                    </th>
+                    <th class="col-check">
+                        <span data-lang="hi">लघु</span>
+                        <span data-lang="en" style="display:none;">Light</span>
+                        <span data-lang="mr" style="display:none;">लघु</span>
+                    </th>
+                    <th class="col-check">
+                        <span data-lang="hi">गुरु</span>
+                        <span data-lang="en" style="display:none;">Heavy</span>
+                        <span data-lang="mr" style="display:none;">गुरु</span>
+                    </th>
+                    <th class="col-check">
+                        <span data-lang="hi">गर्म</span>
+                        <span data-lang="en" style="display:none;">Hot</span>
+                        <span data-lang="mr" style="display:none;">गर्म</span>
+                    </th>
+                    <th class="col-check">
+                        <span data-lang="hi">ठंडा</span>
+                        <span data-lang="en" style="display:none;">Cold</span>
+                        <span data-lang="mr" style="display:none;">थंड</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="afBody">
+                <tr>
+                    <td colspan="8" style="text-align:center;padding:40px;color:#888;">
+                        <span data-lang="hi">लोड हो रहा है...</span>
+                        <span data-lang="en" style="display:none;">Loading...</span>
+                        <span data-lang="mr" style="display:none;">लोड होत आहे...</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+/* ── Page header ───────────────────────────────── */
+.af-page-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: white;
+    padding: 20px 24px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.af-header-icon { font-size: 1.8em; margin-top: 2px; }
+.af-page-header h2 { font-size: 1.15em; color: #1e3a8a; margin: 0 0 5px 0; font-weight: 700; }
+.af-page-header p  { font-size: 0.84em; color: #666; margin: 0; }
+
+/* ── Filters ───────────────────────────────────── */
+.af-filters {
+    background: white;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: grid;
+    grid-template-columns: 1fr auto auto auto auto auto;
+    gap: 10px;
+    align-items: center;
+}
+.af-search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f6fa;
+    border: 1px solid #e8eaf0;
+    border-radius: 7px;
+    padding: 8px 12px;
+}
+.af-search-box input {
+    border: none; background: transparent; outline: none;
+    font-family: inherit; font-size: 0.9em; width: 100%; min-width: 140px;
+}
+.af-filters select {
+    padding: 8px 11px;
+    border: 1px solid #d0d5e0;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 0.84em;
+    background: white;
+    color: #444;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.af-count {
+    font-size: 0.82em;
+    color: #4169e1;
+    font-weight: 600;
+    white-space: nowrap;
+    background: #eef2ff;
+    border-radius: 20px;
+    padding: 4px 12px;
+}
+@media(max-width: 900px) {
+    .af-filters {
+        grid-template-columns: 1fr 1fr;
+    }
+    .af-search-box { grid-column: 1 / -1; }
+    .af-count { grid-column: 1 / -1; text-align: center; }
+}
+
+/* ── Table ─────────────────────────────────────── */
+.af-table-wrap {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    overflow-x: auto;
+}
+.af-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 750px;
+}
+/* Header — blue matching screenshot */
+.af-table thead tr {
+    background: #2563c7;
+    color: white;
+}
+.af-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.91em;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.12);
+}
+.af-table th.col-check { text-align: center; }
+.col-idx    { width: 70px; }
+.col-name   { width: 200px; }
+.col-cat    { width: 140px; }
+.col-subcat { }
+.col-check  { width: 60px; }
+
+/* Body rows — alternating like screenshot */
+.af-table tbody tr { border-bottom: 1px solid #edf0f7; }
+.af-table tbody tr:nth-child(even) { background: #f7f8fc; }
+.af-table tbody tr:hover { background: #eef2ff; }
+.af-table td {
+    padding: 10px 16px;
+    color: #333;
+    vertical-align: middle;
+}
+.af-table td.col-check { text-align: center; font-size: 1em; color: #2563c7; font-weight: 700; }
+
+/* Fade rows with dont_eat */
+.af-table tr.row-dont-eat td { color: #999; }
+.af-table tr.row-dont-eat td:nth-child(2) { color: #c62828; }
+</style>
+
+<script>
+let afAllData  = [];
+let afFiltered = [];
+let afLoaded   = false;
+
+async function loadAllFoods() {
+    if (afLoaded) { afFilter(); return; }
+    const lang = window.currentLang || 'hi';
+    try {
+        const res  = await fetch(`/api/all-foods?lang=${lang}`);
+        const data = await res.json();
+        if (!data.success) return;
+        afAllData = data.items;
+        afLoaded  = true;
+
+        // Populate type filter
+        const types = [...new Set(afAllData.map(i => i.type_code))];
+        const typeF = document.getElementById('afTypeF');
+        types.forEach(code => {
+            const item = afAllData.find(i => i.type_code === code);
+            const opt  = document.createElement('option');
+            opt.value       = code;
+            opt.textContent = `${item.type_icon} ${item.type_name}`;
+            typeF.appendChild(opt);
+        });
+
+        // Populate sub-category filter
+        const subcats = [...new Set(afAllData.map(i => i.sub_category).filter(Boolean))].sort();
+        const subF    = document.getElementById('afSubCatF');
+        subcats.forEach(sc => {
+            const opt  = document.createElement('option');
+            opt.value       = sc;
+            opt.textContent = sc;
+            subF.appendChild(opt);
+        });
+
+        afFilter();
+    } catch(e) {
+        document.getElementById('afBody').innerHTML =
+            '<tr><td colspan="8" style="color:red;text-align:center;padding:30px;">Error loading data</td></tr>';
+    }
+}
+
+function afFilter() {
+    const search  = (document.getElementById('afSearch')?.value  || '').toLowerCase();
+    const typeF   = document.getElementById('afTypeF')?.value    || '';
+    const subCatF = document.getElementById('afSubCatF')?.value  || '';
+    const catF    = document.getElementById('afCatF')?.value     || '';
+    const vratF   = document.getElementById('afVratF')?.value    || '';
+
+    afFiltered = afAllData.filter(f => {
+        if (search  && !f.name.toLowerCase().includes(search) &&
+                       !f.type_name.toLowerCase().includes(search) &&
+                       !(f.sub_category||'').toLowerCase().includes(search)) return false;
+        if (typeF   && f.type_code   !== typeF)   return false;
+        if (subCatF && f.sub_category !== subCatF) return false;
+        if (catF    && f.category    !== catF)    return false;
+        if (vratF === 'yes' && !f.vrat)  return false;
+        if (vratF === 'no'  &&  f.vrat)  return false;
+        return true;
+    });
+
+    const count = document.getElementById('afCount');
+    if (count) count.textContent = `${afFiltered.length} / ${afAllData.length}`;
+
+    renderAfTable();
+}
+
+function renderAfTable() {
+    if (!afFiltered.length) {
+        document.getElementById('afBody').innerHTML =
+            '<tr><td colspan="8" style="text-align:center;padding:30px;color:#aaa;">कोई परिणाम नहीं | No results</td></tr>';
+        return;
+    }
+
+    const chk = '✓';
+    document.getElementById('afBody').innerHTML = afFiltered.map((f, i) => {
+        const rowClass = f.category === 'dont_eat' ? 'row-dont-eat' : '';
+        const subcat   = f.sub_category || '—';
+        return `<tr class="${rowClass}">
+            <td style="color:#aaa;font-size:0.82em;">${i + 1}</td>
+            <td><strong>${f.name}</strong>${f.vrat ? ' <span style="font-size:0.72em;color:#5c6bc0;background:#e8eaf6;border-radius:10px;padding:1px 7px;">🙏 व्रत</span>' : ''}</td>
+            <td>${f.type_icon} ${f.type_name}</td>
+            <td style="color:#555;font-size:0.88em;">${subcat}</td>
+            <td class="col-check">${f.is_laghu  ? chk : ''}</td>
+            <td class="col-check">${f.is_guru   ? chk : ''}</td>
+            <td class="col-check">${f.is_garm   ? chk : ''}</td>
+            <td class="col-check">${f.is_thanda ? chk : ''}</td>
+        </tr>`;
+    }).join('');
+}
+</script>

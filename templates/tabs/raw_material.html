@@ -1,0 +1,305 @@
+<!-- File: templates/tabs/raw_material.html -->
+<div class="tab-content-inner" id="tab-raw-material">
+
+    <div class="tab-page-header">
+        <span>🌱</span>
+        <div>
+            <h2 data-lang="hi">कच्ची सामग्री सूची</h2>
+            <h2 data-lang="en" style="display:none;">Raw Material List</h2>
+            <h2 data-lang="mr" style="display:none;">कच्चा माल यादी</h2>
+            <p data-lang="hi">चयनित व्यंजनों के लिए आवश्यक सामग्री</p>
+            <p data-lang="en" style="display:none;">Required ingredients for selected food items</p>
+            <p data-lang="mr" style="display:none;">निवडलेल्या पदार्थांसाठी आवश्यक साहित्य</p>
+        </div>
+    </div>
+
+    <!-- Purchase Order Summary -->
+    <div class="rm-section">
+        <div class="rm-section-title">
+            <span>📋</span>
+            <span data-lang="hi">खरीद ऑर्डर</span>
+            <span data-lang="en" style="display:none;">Purchase Order</span>
+            <span data-lang="mr" style="display:none;">खरेदी यादी</span>
+        </div>
+        <div class="rm-grid" id="purchaseOrderGrid">
+            <div class="rm-empty-state">
+                <span>🛒</span>
+                <p data-lang="hi">पहले 'भोजन सिफारिशें' टैब से व्यंजन चुनें</p>
+                <p data-lang="en" style="display:none;">Select food items from the 'Food Recommendations' tab first</p>
+                <p data-lang="mr" style="display:none;">प्रथम 'अन्न शिफारसी' टॅबमधून पदार्थ निवडा</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Raw Material Categories -->
+    <div class="rm-section">
+        <div class="rm-section-title">
+            <span>📦</span>
+            <span data-lang="hi">सामग्री श्रेणी अनुसार</span>
+            <span data-lang="en" style="display:none;">Ingredients by Category</span>
+            <span data-lang="mr" style="display:none;">साहित्य श्रेणीनुसार</span>
+        </div>
+
+        <div class="rm-category-grid">
+            <!-- Fruits -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#e8f5e9;">
+                    <span>🍎</span>
+                    <span data-lang="hi">फल</span><span data-lang="en" style="display:none;">Fruits</span><span data-lang="mr" style="display:none;">फळे</span>
+                </div>
+                <div class="rm-cat-body" id="rm-fruit"></div>
+            </div>
+            <!-- Vegetables -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#e3f2fd;">
+                    <span>🥦</span>
+                    <span data-lang="hi">सब्जी</span><span data-lang="en" style="display:none;">Vegetables</span><span data-lang="mr" style="display:none;">भाज्या</span>
+                </div>
+                <div class="rm-cat-body" id="rm-vegetable"></div>
+            </div>
+            <!-- Grains -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#fff8e1;">
+                    <span>🌾</span>
+                    <span data-lang="hi">अन्न / दाल</span><span data-lang="en" style="display:none;">Grains / Pulses</span><span data-lang="mr" style="display:none;">धान्य / डाळी</span>
+                </div>
+                <div class="rm-cat-body" id="rm-grain"></div>
+            </div>
+            <!-- Spices -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#fce4ec;">
+                    <span>🌿</span>
+                    <span data-lang="hi">मसाला</span><span data-lang="en" style="display:none;">Spices</span><span data-lang="mr" style="display:none;">मसाले</span>
+                </div>
+                <div class="rm-cat-body" id="rm-spice"></div>
+            </div>
+            <!-- Dairy -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#f3e5f5;">
+                    <span>🥛</span>
+                    <span data-lang="hi">दूध उत्पाद</span><span data-lang="en" style="display:none;">Dairy</span><span data-lang="mr" style="display:none;">दुग्धजन्य</span>
+                </div>
+                <div class="rm-cat-body" id="rm-dairy"></div>
+            </div>
+            <!-- Dry Fruits -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#efebe9;">
+                    <span>🥜</span>
+                    <span data-lang="hi">सूखे मेवे</span><span data-lang="en" style="display:none;">Dry Fruits</span><span data-lang="mr" style="display:none;">सुके मेवे</span>
+                </div>
+                <div class="rm-cat-body" id="rm-dry_fruit"></div>
+            </div>
+            <!-- Oils -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#fffde7;">
+                    <span>🫙</span>
+                    <span data-lang="hi">तेल</span><span data-lang="en" style="display:none;">Oils</span><span data-lang="mr" style="display:none;">तेल</span>
+                </div>
+                <div class="rm-cat-body" id="rm-oil"></div>
+            </div>
+            <!-- Sweeteners -->
+            <div class="rm-category-card">
+                <div class="rm-cat-header" style="background:#e8eaf6;">
+                    <span>🍯</span>
+                    <span data-lang="hi">मीठा</span><span data-lang="en" style="display:none;">Sweeteners</span><span data-lang="mr" style="display:none;">गोड पदार्थ</span>
+                </div>
+                <div class="rm-cat-body" id="rm-sweetener"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vitamins & Minerals Info -->
+    <div class="rm-section">
+        <div class="rm-section-title">
+            <span>💊</span>
+            <span data-lang="hi">विटामिन एवं खनिज जानकारी</span>
+            <span data-lang="en" style="display:none;">Vitamin & Mineral Information</span>
+            <span data-lang="mr" style="display:none;">जीवनसत्त्वे आणि खनिज माहिती</span>
+        </div>
+        <div class="vitamin-grid">
+            <div class="vitamin-card heavy">
+                <div class="vitamin-label" data-lang="hi">भारी आहार</div>
+                <div class="vitamin-label" data-lang="en" style="display:none;">Heavy Food</div>
+                <div class="vitamin-label" data-lang="mr" style="display:none;">जड आहार</div>
+                <div class="vitamin-items" data-lang="hi">घी, दूध, पनीर, खोया, दाल, चावल</div>
+                <div class="vitamin-items" data-lang="en" style="display:none;">Ghee, Milk, Paneer, Khoya, Dal, Rice</div>
+                <div class="vitamin-items" data-lang="mr" style="display:none;">तूप, दूध, पनीर, खवा, डाळ, तांदूळ</div>
+            </div>
+            <div class="vitamin-card light">
+                <div class="vitamin-label" data-lang="hi">हल्का आहार</div>
+                <div class="vitamin-label" data-lang="en" style="display:none;">Light Food</div>
+                <div class="vitamin-label" data-lang="mr" style="display:none;">हलका आहार</div>
+                <div class="vitamin-items" data-lang="hi">मूंग, छाछ, फल, हरी सब्जी, सूप</div>
+                <div class="vitamin-items" data-lang="en" style="display:none;">Moong, Buttermilk, Fruits, Green Veg, Soup</div>
+                <div class="vitamin-items" data-lang="mr" style="display:none;">मूग, ताक, फळे, हिरव्या भाज्या, सूप</div>
+            </div>
+            <div class="vitamin-card medium">
+                <div class="vitamin-label" data-lang="hi">मध्यम आहार</div>
+                <div class="vitamin-label" data-lang="en" style="display:none;">Medium Food</div>
+                <div class="vitamin-label" data-lang="mr" style="display:none;">मध्यम आहार</div>
+                <div class="vitamin-items" data-lang="hi">रोटी, सब्जी, दही, सलाद, दाल</div>
+                <div class="vitamin-items" data-lang="en" style="display:none;">Roti, Vegetables, Curd, Salad, Dal</div>
+                <div class="vitamin-items" data-lang="mr" style="display:none;">रोटी, भाजी, दही, सलाड, डाळ</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.tab-page-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    padding: 20px 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 1.8em;
+}
+.tab-page-header h2 { font-size: 0.8em; color: #333; margin-bottom: 4px; }
+.tab-page-header p { font-size: 0.45em; color: #777; margin: 0; }
+.rm-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.rm-section-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rm-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.rm-empty-state { text-align: center; padding: 30px; color: #aaa; width: 100%; font-size: 1.3em; }
+.rm-empty-state p { font-size: 0.6em; margin-top: 8px; }
+.rm-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 15px;
+}
+.rm-category-card { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+.rm-cat-header {
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rm-cat-body { padding: 12px 14px; min-height: 60px; font-size: 0.88em; color: #555; line-height: 1.7; }
+.vitamin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.vitamin-card { border-radius: 10px; padding: 16px; }
+.vitamin-card.heavy { background: #fff3e0; border-left: 4px solid #ff9800; }
+.vitamin-card.light  { background: #e8f5e9; border-left: 4px solid #4caf50; }
+.vitamin-card.medium { background: #e3f2fd; border-left: 4px solid #2196f3; }
+.vitamin-label { font-weight: 700; margin-bottom: 8px; font-size: 0.95em; }
+.vitamin-items { font-size: 0.85em; color: #555; line-height: 1.6; }
+@media(max-width:768px) {
+    .vitamin-grid { grid-template-columns: 1fr; }
+    .rm-category-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+
+<script>
+let rmLoaded = false;
+
+async function loadRawMaterialTab(foodData) {
+    // If foodData passed (from recommendations), use it; otherwise fetch from DB
+    const lang = window.currentLang || 'hi';
+    let data = foodData;
+
+    if (!data) {
+        try {
+            const res = await fetch(`/api/all-foods?lang=${lang}`);
+            const json = await res.json();
+            if (json.success) {
+                // Convert flat list to grouped format
+                data = {};
+                json.items.forEach(item => {
+                    if (!data[item.type_code]) {
+                        data[item.type_code] = { name: item.type_name, icon: item.type_icon, eat: [], less_eat: [], dont_eat: [] };
+                    }
+                    data[item.type_code][item.category]?.push({ id: item.id, name: item.name });
+                });
+            }
+        } catch(e) { console.error(e); return; }
+    }
+
+    const categoryMap = {
+        fruit: 'rm-fruit', vegetable: 'rm-vegetable', leafy_veg: 'rm-vegetable',
+        grain: 'rm-grain', pulse: 'rm-grain', spice: 'rm-spice',
+        dairy: 'rm-dairy', dry_fruit: 'rm-dry_fruit', oil: 'rm-oil',
+        sweetener: 'rm-sweetener', fruit_juice: 'rm-fruit',
+        soup: 'rm-vegetable', roti: 'rm-grain', nashta: 'rm-grain', sweet: 'rm-sweetener'
+    };
+
+    // Clear all category bodies
+    document.querySelectorAll('[id^="rm-"]').forEach(el => el.innerHTML = '');
+    const purchaseGrid = document.getElementById('purchaseOrderGrid');
+    if (!data || Object.keys(data).length === 0) return;
+
+    purchaseGrid.innerHTML = '';
+    const allItems = [];
+
+    for (const [type, value] of Object.entries(data)) {
+        const targetId = categoryMap[type];
+        const target = document.getElementById(targetId);
+        const items = [...(value.eat || []), ...(value.less_eat || [])];
+        items.forEach(food => {
+            allItems.push({ name: food.name, type: value.name });
+            if (target) {
+                const chip = document.createElement('span');
+                chip.className = 'rm-chip';
+                chip.textContent = food.name;
+                target.appendChild(chip);
+            }
+        });
+    }
+
+    // Purchase order chips
+    allItems.slice(0, 40).forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'po-chip';
+        chip.innerHTML = `<span class="po-name">${item.name}</span><span class="po-type">${item.type}</span>`;
+        purchaseGrid.appendChild(chip);
+    });
+    rmLoaded = true;
+}
+</script>
+<style>
+.rm-chip {
+    display: inline-block;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.82em;
+    margin: 2px;
+    color: #444;
+}
+.po-chip {
+    display: flex;
+    flex-direction: column;
+    background: #f8f9ff;
+    border: 1px solid #c5cae9;
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 120px;
+}
+.po-name { font-weight: 600; font-size: 0.9em; color: #333; }
+.po-type { font-size: 0.75em; color: #888; margin-top: 2px; }
+#purchaseOrderGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+</style>

@@ -1,0 +1,334 @@
+<!-- File: templates/tabs/shodhana.html -->
+<div class="tab-content-inner" id="tab-shodhana">
+
+    <!-- Page Header -->
+    <div class="sh-page-header">
+        <div class="sh-header-title">
+            ✏️ <span data-lang="hi">शोधन - खाद्य पदार्थों की तैयारी | Food Preparation Process</span>
+            <span data-lang="en" style="display:none;">✏️ Food Preparation Process | Purification Steps</span>
+            <span data-lang="mr" style="display:none;">✏️ शोधन - अन्न पदार्थांची तयारी | Food Preparation Process</span>
+        </div>
+        <div class="sh-header-sub" data-lang="hi">खाद्य पदार्थों को उपयोग से पहले शुद्ध करने की 7-चरण प्रक्रिया</div>
+        <div class="sh-header-sub" data-lang="en" style="display:none;">7-step process to purify food items before use</div>
+        <div class="sh-header-sub" data-lang="mr" style="display:none;">अन्न वापरण्यापूर्वी शुद्ध करण्याची 7-टप्पा प्रक्रिया</div>
+    </div>
+
+    <!-- 7 Step Cards (matching image) -->
+    <div class="sh-steps-box">
+        <div class="sh-steps-title">
+            <span data-lang="hi">7 चरण | 7 Steps:</span>
+            <span data-lang="en" style="display:none;">7 Steps | 7 चरण:</span>
+            <span data-lang="mr" style="display:none;">7 टप्पे | 7 Steps:</span>
+        </div>
+        <div class="sh-steps-grid">
+            <div class="sh-step-card" style="border-left-color:#7c3aed;">
+                <strong data-lang="hi">चरण 1:</strong><strong data-lang="en" style="display:none;">Step 1:</strong><strong data-lang="mr" style="display:none;">टप्पा 1:</strong>
+                <span data-lang="hi"> छानना (Sieving)</span><span data-lang="en" style="display:none;"> Sieving (छानना)</span><span data-lang="mr" style="display:none;"> चाळणे (Sieving)</span>
+            </div>
+            <div class="sh-step-card" style="border-left-color:#059669;">
+                <strong data-lang="hi">चरण 2:</strong><strong data-lang="en" style="display:none;">Step 2:</strong><strong data-lang="mr" style="display:none;">टप्पा 2:</strong>
+                <span data-lang="hi"> बीनना (Picking)</span><span data-lang="en" style="display:none;"> Picking (बीनना)</span><span data-lang="mr" style="display:none;"> निवडणे (Picking)</span>
+            </div>
+            <div class="sh-step-card" style="border-left-color:#d97706;">
+                <strong data-lang="hi">चरण 3:</strong><strong data-lang="en" style="display:none;">Step 3:</strong><strong data-lang="mr" style="display:none;">टप्पा 3:</strong>
+                <span data-lang="hi"> धुलना (Washing)</span><span data-lang="en" style="display:none;"> Washing (धुलना)</span><span data-lang="mr" style="display:none;"> धुणे (Washing)</span>
+            </div>
+            <div class="sh-step-card" style="border-left-color:#dc2626;">
+                <strong data-lang="hi">चरण 4:</strong><strong data-lang="en" style="display:none;">Step 4:</strong><strong data-lang="mr" style="display:none;">टप्पा 4:</strong>
+                <span data-lang="hi"> गीले कपड़े से पोंछना (Wiping)</span><span data-lang="en" style="display:none;"> Wiping (पोंछना)</span><span data-lang="mr" style="display:none;"> ओल्या कापडाने पुसणे</span>
+            </div>
+            <div class="sh-step-card" style="border-left-color:#7c3aed;">
+                <strong data-lang="hi">चरण 5:</strong><strong data-lang="en" style="display:none;">Step 5:</strong><strong data-lang="mr" style="display:none;">टप्पा 5:</strong>
+                <span data-lang="hi"> सुखाना (Drying)</span><span data-lang="en" style="display:none;"> Drying (सुखाना)</span><span data-lang="mr" style="display:none;"> वाळवणे (Drying)</span>
+            </div>
+            <div class="sh-step-card" style="border-left-color:#db2777;">
+                <strong data-lang="hi">चरण 6:</strong><strong data-lang="en" style="display:none;">Step 6:</strong><strong data-lang="mr" style="display:none;">टप्पा 6:</strong>
+                <span data-lang="hi"> बीनना (Re-picking)</span><span data-lang="en" style="display:none;"> Re-picking (बीनना)</span><span data-lang="mr" style="display:none;"> पुन्हा निवडणे</span>
+            </div>
+            <div class="sh-step-card" style="border-left-color:#0891b2;">
+                <strong data-lang="hi">चरण 7:</strong><strong data-lang="en" style="display:none;">Step 7:</strong><strong data-lang="mr" style="display:none;">टप्पा 7:</strong>
+                <span data-lang="hi"> रखरखाव (Storage)</span><span data-lang="en" style="display:none;"> Storage (रखरखाव)</span><span data-lang="mr" style="display:none;"> साठवणूक (Storage)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Table with colored step columns (matching image) -->
+    <div class="sh-table-card">
+        <div class="sh-table-wrap">
+        <table class="sh-main-table" id="shodhanaTable">
+            <thead>
+                <tr>
+                    <th class="th-group" rowspan="2">
+                        <span data-lang="hi">समूह | Group</span>
+                        <span data-lang="en" style="display:none;">Group | समूह</span>
+                        <span data-lang="mr" style="display:none;">समूह | Group</span>
+                    </th>
+                    <th class="th-subgroup" rowspan="2">
+                        <span data-lang="hi">उपसमूह | Subgroup</span>
+                        <span data-lang="en" style="display:none;">Subgroup | उपसमूह</span>
+                        <span data-lang="mr" style="display:none;">उपसमूह | Subgroup</span>
+                    </th>
+                    <th class="th-item" rowspan="2">
+                        <span data-lang="hi">सामग्री | Item</span>
+                        <span data-lang="en" style="display:none;">Item | सामग्री</span>
+                        <span data-lang="mr" style="display:none;">साहित्य | Item</span>
+                    </th>
+                    <th class="th-step th-step-1">
+                        <span data-lang="hi">चरण 1<br>छानना</span>
+                        <span data-lang="en" style="display:none;">Step 1<br>Sieving</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 1<br>चाळणे</span>
+                    </th>
+                    <th class="th-step th-step-2">
+                        <span data-lang="hi">चरण 2<br>बीनना</span>
+                        <span data-lang="en" style="display:none;">Step 2<br>Picking</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 2<br>निवडणे</span>
+                    </th>
+                    <th class="th-step th-step-3">
+                        <span data-lang="hi">चरण 3<br>धुलना</span>
+                        <span data-lang="en" style="display:none;">Step 3<br>Washing</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 3<br>धुणे</span>
+                    </th>
+                    <th class="th-step th-step-4">
+                        <span data-lang="hi">चरण 4<br>पोंछना</span>
+                        <span data-lang="en" style="display:none;">Step 4<br>Wiping</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 4<br>पुसणे</span>
+                    </th>
+                    <th class="th-step th-step-5">
+                        <span data-lang="hi">चरण 5<br>सुखाना</span>
+                        <span data-lang="en" style="display:none;">Step 5<br>Drying</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 5<br>वाळवणे</span>
+                    </th>
+                    <th class="th-step th-step-6">
+                        <span data-lang="hi">चरण 6<br>बीनना</span>
+                        <span data-lang="en" style="display:none;">Step 6<br>Re-pick</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 6<br>पुन्हा निवडणे</span>
+                    </th>
+                    <th class="th-step th-step-7">
+                        <span data-lang="hi">चरण 7<br>रखरखाव</span>
+                        <span data-lang="en" style="display:none;">Step 7<br>Storage</span>
+                        <span data-lang="mr" style="display:none;">टप्पा 7<br>साठवणूक</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="shodhanaBody">
+                <tr><td colspan="10" style="text-align:center;padding:30px;color:#888;">
+                    <span data-lang="hi">लोड हो रहा है...</span>
+                    <span data-lang="en" style="display:none;">Loading...</span>
+                    <span data-lang="mr" style="display:none;">लोड होत आहे...</span>
+                </td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ── Page header ─────────────────────────────────── */
+.sh-page-header {
+    background: white;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.sh-header-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 5px;
+}
+.sh-header-sub { font-size: 0.85em; color: #666; }
+
+/* ── 7-step cards box ────────────────────────────── */
+.sh-steps-box {
+    background: #f0f4ff;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+}
+.sh-steps-title {
+    font-size: 1em;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 14px;
+}
+.sh-steps-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.sh-step-card {
+    background: white;
+    border-left: 4px solid #7c3aed;
+    border-radius: 0 6px 6px 0;
+    padding: 9px 14px;
+    font-size: 0.88em;
+    color: #333;
+    min-width: 180px;
+    flex: 1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.sh-step-card strong { color: #1e3a8a; }
+
+/* ── Main table card ─────────────────────────────── */
+.sh-table-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.sh-table-wrap { overflow-x: auto; }
+
+.sh-main-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    min-width: 900px;
+}
+
+/* Header rows */
+.sh-main-table thead tr:first-child th { vertical-align: middle; }
+.th-group    { background: #2563c7; color: white; padding: 12px 14px; font-weight: 700; min-width: 110px; }
+.th-subgroup { background: #2563c7; color: white; padding: 12px 14px; font-weight: 700; min-width: 120px; }
+.th-item     { background: #2563c7; color: white; padding: 12px 14px; font-weight: 700; min-width: 130px; }
+
+/* Step column headers — colored like image */
+.th-step { text-align: center; padding: 8px 10px; font-weight: 700; font-size: 0.82em; line-height: 1.3; min-width: 72px; }
+.th-step-1 { background: #ede9fe; color: #5b21b6; }
+.th-step-2 { background: #d1fae5; color: #065f46; }
+.th-step-3 { background: #fed7aa; color: #92400e; }
+.th-step-4 { background: #fee2e2; color: #991b1b; }
+.th-step-5 { background: #e0e7ff; color: #3730a3; }
+.th-step-6 { background: #fce7f3; color: #9d174d; }
+.th-step-7 { background: #cffafe; color: #155e75; }
+
+/* Body */
+.sh-main-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+.sh-main-table tbody tr:hover { background: #f8f9ff; }
+.sh-main-table tbody tr:nth-child(even) { background: #fafafa; }
+.sh-main-table tbody tr:nth-child(even):hover { background: #f0f4ff; }
+
+.sh-main-table td {
+    padding: 9px 14px;
+    vertical-align: middle;
+    color: #333;
+}
+.td-group    { font-weight: 700; color: #1e3a8a; font-size: 0.9em; }
+.td-subgroup { color: #555; font-size: 0.86em; }
+.td-item     { font-weight: 600; }
+.td-step     { text-align: center; font-size: 0.95em; }
+
+/* Step cell backgrounds matching header tints */
+.td-s1 { background: rgba(237,233,254,0.35); }
+.td-s2 { background: rgba(209,250,229,0.35); }
+.td-s3 { background: rgba(254,215,170,0.35); }
+.td-s4 { background: rgba(254,226,226,0.35); }
+.td-s5 { background: rgba(224,231,255,0.35); }
+.td-s6 { background: rgba(252,231,243,0.35); }
+.td-s7 { background: rgba(207,250,254,0.35); }
+
+.sh-check { color: #059669; font-weight: 700; font-size: 1em; }
+.sh-req   { font-size: 0.78em; color: #d97706; font-weight: 600; }
+.sh-dash  { color: #ccc; }
+
+@media(max-width:768px) {
+    .sh-steps-grid { flex-direction: column; }
+    .sh-step-card { min-width: unset; }
+}
+</style>
+
+<script>
+let shodhanaLoaded = false;
+
+/*
+  Purification step matrix — driven by food_type from DB.
+  Rules: [sieve, pick, wash, wipe, dry, repick, store]
+  Values: 'check' | 'req' (आवश्यक) | '' (not applicable)
+*/
+const STEP_RULES = {
+    grain:       ['check','check','check','req',  'check','check','check'],
+    pulse:       ['check','check','check','req',  'check','check','check'],
+    dry_fruit:   ['check','check','check','',     'check','check','check'],
+    spice:       ['check','check','',    '',      'check','check','check'],
+    fruit:       ['',     '',     'check','req',  '',     '',     'check'],
+    vegetable:   ['',     'check','check','req',  '',     '',     'check'],
+    leafy_veg:   ['',     'check','check','',     'check','',     'check'],
+    dairy:       ['',     '',     '',     '',      '',     '',     'check'],
+    oil:         ['',     '',     '',     '',      '',     '',     'check'],
+    sweetener:   ['check','check','',    '',      '',     'check','check'],
+    roti:        ['',     '',     '',     '',      '',     '',     ''],
+    nashta:      ['',     '',     '',     '',      '',     '',     ''],
+    sweet:       ['',     '',     '',     '',      '',     '',     ''],
+    beverage:    ['',     '',     '',     '',      '',     '',     'check'],
+    soup:        ['',     '',     '',     '',      '',     '',     ''],
+    fruit_juice: ['',     '',     '',     '',      '',     '',     'check'],
+};
+
+async function loadShodhanaTab() {
+    if (shodhanaLoaded) return;
+    const lang = window.currentLang || 'hi';
+    try {
+        const res  = await fetch(`/api/all-foods?lang=${lang}`);
+        const data = await res.json();
+        if (!data.success) return;
+
+        // Group items by type
+        const groups = {};
+        data.items.forEach(item => {
+            if (!groups[item.type_code]) {
+                groups[item.type_code] = {
+                    name: item.type_name,
+                    icon: item.type_icon,
+                    items: []
+                };
+            }
+            groups[item.type_code].items.push(item);
+        });
+
+        const chk  = '<span class="sh-check">✓</span>';
+        const req  = lang === 'en' ? '<span class="sh-req">Required</span>' :
+                     lang === 'mr' ? '<span class="sh-req">आवश्यक</span>' :
+                                     '<span class="sh-req">आवश्यक</span>';
+        const dash = '<span class="sh-dash">-</span>';
+
+        const stepClasses = ['td-s1','td-s2','td-s3','td-s4','td-s5','td-s6','td-s7'];
+
+        let html = '';
+        let rowCount = 0;
+
+        for (const [typeCode, group] of Object.entries(groups)) {
+            const rules = STEP_RULES[typeCode] || ['','','','','','',''];
+            const stepCells = rules.map((r, i) => {
+                const val = r === 'check' ? chk : r === 'req' ? req : dash;
+                return `<td class="td-step ${stepClasses[i]}">${val}</td>`;
+            }).join('');
+
+            // First item of group shows group name (rowspan)
+            const items = group.items.slice(0, 8); // limit rows per type for readability
+            items.forEach((item, idx) => {
+                const isFirst = idx === 0;
+                if (isFirst) {
+                    html += `<tr>
+                        <td class="td-group" rowspan="${items.length}">${group.icon} ${group.name}</td>
+                        <td class="td-subgroup">${item.sub_category || '-'}</td>
+                        <td class="td-item">${item.name}</td>
+                        ${stepCells}
+                    </tr>`;
+                } else {
+                    html += `<tr>
+                        <td class="td-subgroup">${item.sub_category || '-'}</td>
+                        <td class="td-item">${item.name}</td>
+                        ${stepCells}
+                    </tr>`;
+                }
+                rowCount++;
+            });
+        }
+
+        document.getElementById('shodhanaBody').innerHTML = html || '<tr><td colspan="10" style="padding:30px;text-align:center;color:#aaa;">No data</td></tr>';
+        shodhanaLoaded = true;
+    } catch(e) {
+        document.getElementById('shodhanaBody').innerHTML = '<tr><td colspan="10" style="color:red;padding:20px;text-align:center;">Error loading data</td></tr>';
+    }
+}
+</script>

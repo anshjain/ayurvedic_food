@@ -1,0 +1,80 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header" style="background: linear-gradient(135deg, #1a3a6b, #2c5aa0); color: white;">
+                    <h4 class="mb-0">🌿 आयुर्वेदिक आहार प्रशासन पैनल</h4>
+                    <small>Ayurvedic Food Guidance System — Admin Dashboard</small>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-3">
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <h2>🥗</h2>
+                                    <h5>Food Items</h5>
+                                    <p class="text-muted">Manage all food entries, categories, and classifications</p>
+                                    <a href="/admin/fooditem/" class="btn btn-success btn-sm">Manage →</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <h2>🌤️</h2>
+                                    <h5>Seasons</h5>
+                                    <p class="text-muted">Configure the 12 Hindu calendar seasons (ऋतुएँ)</p>
+                                    <a href="/admin/season/" class="btn btn-info btn-sm">Manage →</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <h2>🏥</h2>
+                                    <h5>Diseases</h5>
+                                    <p class="text-muted">Manage disease categories for food filtering</p>
+                                    <a href="/admin/disease/" class="btn btn-warning btn-sm">Manage →</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-danger">
+                                <div class="card-body text-center">
+                                    <h2>👅</h2>
+                                    <h5>Tastes (रस)</h5>
+                                    <p class="text-muted">Configure the six Ayurvedic tastes</p>
+                                    <a href="/admin/taste/" class="btn btn-danger btn-sm">Manage →</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-secondary">
+                                <div class="card-body text-center">
+                                    <h2>👤</h2>
+                                    <h5>Admin Users</h5>
+                                    <p class="text-muted">Manage administrator accounts</p>
+                                    <a href="/admin/adminuser/" class="btn btn-secondary btn-sm">Manage →</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body text-center">
+                                    <h2>🔙</h2>
+                                    <h5>Main Site</h5>
+                                    <p class="text-muted">Go back to the food recommendations form</p>
+                                    <a href="/" class="btn btn-primary btn-sm">Go →</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,420 @@
+<!-- File: templates/tabs/my_menu.html -->
+<div class="tab-content-inner" id="tab-my-menu">
+
+    <div class="tab-page-header">
+        <span>📋</span>
+        <div>
+            <h2 data-lang="hi">मेरा मेनू</h2>
+            <h2 data-lang="en" style="display:none;">My Menu</h2>
+            <h2 data-lang="mr" style="display:none;">माझी यादी</h2>
+            <p data-lang="hi">चयनित व्यंजनों की सूची — प्रिंट या डाउनलोड करें</p>
+            <p data-lang="en" style="display:none;">Your selected food list — Print or Download</p>
+            <p data-lang="mr" style="display:none;">निवडलेल्या पदार्थांची यादी — प्रिंट किंवा डाउनलोड</p>
+        </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="mm-action-bar">
+        <div class="mm-count-badge">
+            <span id="mmCount">0</span>
+            <span data-lang="hi"> व्यंजन चयनित</span>
+            <span data-lang="en" style="display:none;"> items selected</span>
+            <span data-lang="mr" style="display:none;"> पदार्थ निवडले</span>
+        </div>
+        <div class="mm-actions">
+            <button class="mm-btn mm-btn-print" onclick="printMenu()">
+                🖨️ <span data-lang="hi">प्रिंट करें</span><span data-lang="en" style="display:none;">Print</span><span data-lang="mr" style="display:none;">प्रिंट</span>
+            </button>
+            <button class="mm-btn mm-btn-download" onclick="downloadMenuPDF()">
+                ⬇️ <span data-lang="hi">PDF डाउनलोड</span><span data-lang="en" style="display:none;">Download PDF</span><span data-lang="mr" style="display:none;">PDF डाउनलोड</span>
+            </button>
+            <button class="mm-btn mm-btn-clear" onclick="clearMyMenu()">
+                🗑️ <span data-lang="hi">सब हटाएं</span><span data-lang="en" style="display:none;">Clear All</span><span data-lang="mr" style="display:none;">सर्व काढा</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="mmEmptyState" class="mm-empty">
+        <div class="mm-empty-icon">🍽️</div>
+        <div class="mm-empty-title" data-lang="hi">अभी कोई व्यंजन नहीं चुना गया</div>
+        <div class="mm-empty-title" data-lang="en" style="display:none;">No food items selected yet</div>
+        <div class="mm-empty-title" data-lang="mr" style="display:none;">अद्याप कोणताही पदार्थ निवडला नाही</div>
+        <div class="mm-empty-hint" data-lang="hi">'भोजन सिफारिशें' टैब पर जाएं और चेकबॉक्स से व्यंजन चुनें</div>
+        <div class="mm-empty-hint" data-lang="en" style="display:none;">Go to 'Food Recommendations' tab and check items to add them here</div>
+        <div class="mm-empty-hint" data-lang="mr" style="display:none;">'अन्न शिफारसी' टॅबवर जा आणि चेकबॉक्सने पदार्थ निवडा</div>
+        <button class="mm-goto-btn" onclick="switchTab('food')">
+            <span data-lang="hi">→ भोजन सिफारिशें पर जाएं</span>
+            <span data-lang="en" style="display:none;">→ Go to Food Recommendations</span>
+            <span data-lang="mr" style="display:none;">→ अन्न शिफारसींकडे जा</span>
+        </button>
+    </div>
+
+    <!-- Menu Content (printable) -->
+    <div id="mmContent" style="display:none;">
+
+        <!-- Printable area -->
+        <div id="mmPrintArea">
+            <!-- Print Header -->
+            <div class="mm-print-header">
+                <div class="mm-print-logo">🌿</div>
+                <div>
+                    <h1 class="mm-print-title" data-lang="hi">मेरा आयुर्वेदिक मेनू</h1>
+                    <h1 class="mm-print-title" data-lang="en" style="display:none;">My Ayurvedic Menu</h1>
+                    <h1 class="mm-print-title" data-lang="mr" style="display:none;">माझा आयुर्वेदिक मेनू</h1>
+                    <p class="mm-print-subtitle">विद्या आहार औषधि | Ayurvedic Food Guidance System</p>
+                    <p class="mm-print-date" id="mmPrintDate"></p>
+                </div>
+            </div>
+
+            <!-- Selected filters summary -->
+            <div class="mm-filter-summary" id="mmFilterSummary"></div>
+
+            <!-- Food table by category -->
+            <div id="mmGroupedList"></div>
+
+            <!-- Footer note -->
+            <div class="mm-print-footer">
+                <p data-lang="hi">📝 यह सूची आयुर्वेदिक सिद्धांतों पर आधारित है। किसी भी आहार परिवर्तन से पहले अपने वैद्य से परामर्श लें।</p>
+                <p data-lang="en" style="display:none;">📝 This list is based on Ayurvedic principles. Consult your physician before making any dietary changes.</p>
+                <p data-lang="mr" style="display:none;">📝 ही यादी आयुर्वेदिक तत्त्वांवर आधारित आहे. कोणताही आहार बदल करण्यापूर्वी आपल्या वैद्यांचा सल्ला घ्या.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+/* ── Action bar ────────────────────────────────── */
+.mm-action-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.mm-count-badge {
+    background: #e8eaf6;
+    color: #3949ab;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-weight: 700;
+    font-size: 1em;
+}
+.mm-count-badge span:first-child { font-size: 1.4em; }
+.mm-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.mm-btn {
+    padding: 9px 18px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mm-btn-print    { background: #1e3a8a; color: white; }
+.mm-btn-download { background: #2e7d32; color: white; }
+.mm-btn-clear    { background: #fff; color: #c62828; border: 2px solid #c62828; }
+.mm-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* ── Empty state ───────────────────────────────── */
+.mm-empty {
+    background: white;
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.mm-empty-icon  { font-size: 3.5em; margin-bottom: 16px; }
+.mm-empty-title { font-size: 1.2em; font-weight: 700; color: #333; margin-bottom: 8px; }
+.mm-empty-hint  { font-size: 0.9em; color: #888; margin-bottom: 20px; }
+.mm-goto-btn {
+    background: #4169e1; color: white;
+    border: none; border-radius: 8px;
+    padding: 10px 24px; font-size: 0.95em;
+    font-family: inherit; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+}
+.mm-goto-btn:hover { background: #2c4fbb; }
+
+/* ── Print area ────────────────────────────────── */
+#mmPrintArea {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.mm-print-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #1e3a8a;
+    margin-bottom: 20px;
+}
+.mm-print-logo   { font-size: 3em; }
+.mm-print-title  { font-size: 1.6em; color: #1e3a8a; margin: 0 0 4px 0; }
+.mm-print-subtitle { font-size: 0.9em; color: #666; margin: 2px 0; }
+.mm-print-date   { font-size: 0.82em; color: #aaa; margin: 4px 0 0 0; }
+
+.mm-filter-summary {
+    background: #f0f4ff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.85em;
+    color: #555;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.mm-filter-tag {
+    background: #c5cae9;
+    color: #283593;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-weight: 600;
+    font-size: 0.88em;
+}
+
+/* ── Grouped food sections ─────────────────────── */
+.mm-group {
+    margin-bottom: 24px;
+}
+.mm-group-header {
+    background: #1e3a8a;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    font-weight: 700;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mm-group-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+}
+.mm-group-table th {
+    background: #f5f5f5;
+    padding: 8px 14px;
+    text-align: left;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: #555;
+    border-bottom: 1px solid #e0e0e0;
+}
+.mm-group-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9em;
+}
+.mm-group-table tr:last-child td { border-bottom: none; }
+.mm-group-table tr:hover { background: #fafbff; }
+.mm-remove-btn {
+    background: none;
+    border: none;
+    color: #e53935;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+.mm-remove-btn:hover { background: #ffebee; }
+
+.mm-print-footer {
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.82em;
+    color: #888;
+    font-style: italic;
+}
+
+/* ── Print styles ──────────────────────────────── */
+@media print {
+    body > *:not(#mmPrintArea) { display: none !important; }
+    #mmPrintArea { box-shadow: none !important; padding: 0 !important; }
+    .mm-remove-btn, .mm-action-bar, .tab-page-header, .mm-action-bar { display: none !important; }
+    .mm-group-table tr { break-inside: avoid; }
+}
+</style>
+
+<script>
+let myMenuItems = [];
+
+async function loadMyMenu() {
+    try {
+        const res = await fetch('/api/selected-foods');
+        const data = await res.json();
+        if (data.success) {
+            myMenuItems = data.items;
+            renderMyMenu();
+        }
+    } catch(e) {
+        console.error('loadMyMenu error:', e);
+    }
+}
+
+function renderMyMenu() {
+    const lang = window.currentLang || 'hi';
+    const count = myMenuItems.length;
+
+    // Update count badge
+    document.getElementById('mmCount').textContent = count;
+
+    // Show/hide empty state
+    const empty   = document.getElementById('mmEmptyState');
+    const content = document.getElementById('mmContent');
+    if (count === 0) {
+        empty.style.display = '';
+        content.style.display = 'none';
+        return;
+    }
+    empty.style.display = 'none';
+    content.style.display = '';
+
+    // Set print date
+    document.getElementById('mmPrintDate').textContent =
+        new Date().toLocaleDateString(lang === 'hi' ? 'hi-IN' : lang === 'mr' ? 'mr-IN' : 'en-IN',
+            { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Group by food_type
+    const groups = {};
+    myMenuItems.forEach(item => {
+        const key = item.type || 'other';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(item);
+    });
+
+    // Food type labels
+    const typeLabels = {
+        hi: { fruit:'फल', fruit_juice:'फलों का रस', vegetable:'सब्जी', leafy_veg:'पत्तेदार सब्जी',
+              grain:'अन्न', pulse:'दाल', spice:'मसाला', dry_fruit:'सूखे मेवे', dairy:'दूध उत्पाद',
+              oil:'तेल', sweetener:'मीठा', beverage:'पेय', soup:'सूप', roti:'रोटी',
+              nashta:'नाश्ता', sweet:'मीठे व्यंजन', other:'अन्य' },
+        en: { fruit:'Fruit', fruit_juice:'Fruit Juice', vegetable:'Vegetable', leafy_veg:'Leafy Vegetable',
+              grain:'Grain', pulse:'Pulse', spice:'Spice', dry_fruit:'Dry Fruit', dairy:'Dairy',
+              oil:'Oil', sweetener:'Sweetener', beverage:'Beverage', soup:'Soup', roti:'Bread/Roti',
+              nashta:'Snacks', sweet:'Sweet Dishes', other:'Other' },
+        mr: { fruit:'फळे', fruit_juice:'फळांचा रस', vegetable:'भाजी', leafy_veg:'पालेभाजी',
+              grain:'धान्य', pulse:'डाळ', spice:'मसाला', dry_fruit:'सुके मेवे', dairy:'दुग्धजन्य',
+              oil:'तेल', sweetener:'गोड पदार्थ', beverage:'पेय', soup:'सूप', roti:'रोटी/भाकरी',
+              nashta:'नाश्ता', sweet:'गोड पदार्थ', other:'इतर' }
+    };
+
+    const typeIcons = {
+        fruit:'🍎', fruit_juice:'🥤', vegetable:'🥦', leafy_veg:'🥬', grain:'🌾',
+        pulse:'🫘', spice:'🌿', dry_fruit:'🥜', dairy:'🥛', oil:'🫙',
+        sweetener:'🍯', beverage:'☕', soup:'🍲', roti:'🫓', nashta:'🍘', sweet:'🍮', other:'🍽️'
+    };
+
+    const colHeads = {
+        hi:  ['नाम', 'प्रकार', 'हटाएं'],
+        en:  ['Name', 'Type',  'Remove'],
+        mr:  ['नाव', 'प्रकार', 'काढा']
+    };
+    const [h1, h2, h3] = colHeads[lang] || colHeads.hi;
+    const labels = typeLabels[lang] || typeLabels.hi;
+
+    let html = '';
+    for (const [type, items] of Object.entries(groups)) {
+        const label = labels[type] || type;
+        const icon  = typeIcons[type] || '🍽️';
+        html += `<div class="mm-group">
+            <div class="mm-group-header">${icon} ${label} <span style="margin-left:auto;font-size:0.82em;opacity:0.8;">${items.length} items</span></div>
+            <table class="mm-group-table">
+                <thead><tr><th>#</th><th>${h1}</th><th>${h2}</th><th class="no-print">${h3}</th></tr></thead>
+                <tbody>
+                ${items.map((item, i) => `
+                    <tr id="mm-row-${item.food_id}">
+                        <td style="color:#aaa;width:36px;">${i+1}</td>
+                        <td><strong>${item.name}</strong></td>
+                        <td style="color:#888;font-size:0.85em;">${icon} ${label}</td>
+                        <td class="no-print"><button class="mm-remove-btn" onclick="mmRemoveItem(${item.food_id})" title="Remove">✕</button></td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+        </div>`;
+    }
+    document.getElementById('mmGroupedList').innerHTML = html;
+
+    // Filter summary
+    const pref = {
+        ritu:   document.getElementById('rituSelect')?.value,
+        bimari: document.getElementById('bimariSelect')?.value,
+        rasa:   document.getElementById('rasaSelect')?.value
+    };
+    let tags = '';
+    if (pref.ritu)   tags += `<span class="mm-filter-tag">🌤️ ${pref.ritu}</span>`;
+    if (pref.bimari) tags += `<span class="mm-filter-tag">🏥 ${pref.bimari}</span>`;
+    if (pref.rasa)   tags += `<span class="mm-filter-tag">👅 ${pref.rasa}</span>`;
+    document.getElementById('mmFilterSummary').innerHTML = tags ||
+        `<span style="color:#aaa">${lang==='en'?'No filters applied':'कोई फ़िल्टर नहीं'}</span>`;
+}
+
+async function mmRemoveItem(foodId) {
+    try {
+        const res = await fetch('/api/toggle-selection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ food_id: foodId, action: 'remove' })
+        });
+        const data = await res.json();
+        if (data.success) {
+            myMenuItems = myMenuItems.filter(i => i.food_id !== foodId);
+            if (window.selectedItems) window.selectedItems.delete(foodId);
+            if (typeof window.updateCounter === 'function') window.updateCounter();
+            // Animate removal
+            const row = document.getElementById(`mm-row-${foodId}`);
+            if (row) {
+                row.style.transition = 'opacity 0.3s';
+                row.style.opacity = '0';
+                setTimeout(() => renderMyMenu(), 310);
+            } else {
+                renderMyMenu();
+            }
+        }
+    } catch(e) { alert('Error removing item'); }
+}
+
+function clearMyMenu() {
+    const lang = window.currentLang || 'hi';
+    const msg = lang === 'en' ? 'Clear all selected items?' :
+                lang === 'mr' ? 'सर्व निवडलेले पदार्थ काढायचे?' :
+                                'सभी चयनित व्यंजन हटाएं?';
+    if (!confirm(msg)) return;
+    if (typeof window.clearSelection === 'function') window.clearSelection();
+    myMenuItems = [];
+    renderMyMenu();
+}
+
+function printMenu() {
+    // Hide non-print elements momentarily
+    const noPrint = document.querySelectorAll('.no-print, .mm-action-bar, .tab-page-header');
+    noPrint.forEach(el => el.dataset.wasVisible = el.style.display);
+    window.print();
+}
+
+function downloadMenuPDF() {
+    // Use browser's print-to-PDF functionality
+    const lang = window.currentLang || 'hi';
+    const msg = lang === 'en' ?
+        'In the print dialog, select "Save as PDF" as the destination.' :
+        lang === 'mr' ? 'प्रिंट डायलॉगमध्ये "Save as PDF" निवडा.' :
+        'प्रिंट डायलॉग में "Save as PDF" चुनें।';
+    alert(msg);
+    printMenu();
+}
+</script>

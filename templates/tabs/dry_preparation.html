@@ -1,0 +1,232 @@
+<!-- File: templates/tabs/dry_preparation.html -->
+<div class="tab-content-inner" id="tab-dry-prep">
+
+    <div class="tab-page-header">
+        <span>🌿</span>
+        <div>
+            <h2 data-lang="hi">सूखी तैयारी (घर में)</h2>
+            <h2 data-lang="en" style="display:none;">Dry Preparation (At Home)</h2>
+            <h2 data-lang="mr" style="display:none;">सुकी तयारी (घरी)</h2>
+            <p data-lang="hi">सूखे पदार्थों की तैयारी, पिसाई एवं रखरखाव</p>
+            <p data-lang="en" style="display:none;">Preparation, grinding and storage of dry food items</p>
+            <p data-lang="mr" style="display:none;">सुक्या पदार्थांची तयारी, दळणे आणि साठवणूक</p>
+        </div>
+    </div>
+
+    <!-- Preparation Steps Table -->
+    <!-- DB-driven dry prep table -->
+<div class="dp-section" id="dp-db-section" style="display:none;">
+    <div class="dp-section-title">
+        <span>📦</span>
+        <span data-lang="hi">सूखी सामग्री — DB से (Dry Items from Database)</span>
+        <span data-lang="en" style="display:none;">Dry Items from Database</span>
+        <span data-lang="mr" style="display:none;">सुक्या वस्तू — DB मधून</span>
+    </div>
+    <div class="dp-fruits-grid" id="dpDbGrid"></div>
+</div>
+
+<div class="dp-section">
+        <div class="dp-section-title">
+            <span>📋</span>
+            <span data-lang="hi">तैयारी के चरण</span>
+            <span data-lang="en" style="display:none;">Preparation Steps</span>
+            <span data-lang="mr" style="display:none;">तयारीचे टप्पे</span>
+        </div>
+        <div style="overflow-x:auto;">
+        <table class="dp-table">
+            <thead>
+                <tr>
+                    <th data-lang="hi">सामग्री / उपसामग्री</th><th data-lang="en" style="display:none;">Ingredient</th><th data-lang="mr" style="display:none;">साहित्य</th>
+                    <th data-lang="hi">पिसाई</th><th data-lang="en" style="display:none;">Grinding</th><th data-lang="mr" style="display:none;">दळणे</th>
+                    <th data-lang="hi">मात्रा</th><th data-lang="en" style="display:none;">Quantity</th><th data-lang="mr" style="display:none;">प्रमाण</th>
+                    <th data-lang="hi">रखरखाव</th><th data-lang="en" style="display:none;">Storage</th><th data-lang="mr" style="display:none;">साठवणूक</th>
+                    <th data-lang="hi">मर्यादा</th><th data-lang="en" style="display:none;">Limit</th><th data-lang="mr" style="display:none;">मर्यादा</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong data-lang="hi">मसाला मिश्रण</strong><span data-lang="en" style="display:none;"><strong>Spice Mix</strong></span><span data-lang="mr" style="display:none;"><strong>मसाला मिश्रण</strong></span></td>
+                    <td><span data-lang="hi">बारीक पीसें</span><span data-lang="en" style="display:none;">Finely grind</span><span data-lang="mr" style="display:none;">बारीक दळा</span></td>
+                    <td><span data-lang="hi">आवश्यकतानुसार</span><span data-lang="en" style="display:none;">As needed</span><span data-lang="mr" style="display:none;">आवश्यकतेनुसार</span></td>
+                    <td>
+                        <span data-lang="hi">→ फ्रिज नहीं<br>→ Store — 7 days → Boxed<br>→ मसालादानी</span>
+                        <span data-lang="en" style="display:none;">→ No fridge<br>→ Store 7 days → Boxed<br>→ Spice container</span>
+                        <span data-lang="mr" style="display:none;">→ फ्रीज नको<br>→ 7 दिवस → डबा</span>
+                    </td>
+                    <td>
+                        <span class="limit-tag" data-lang="hi">① वजन का असर<br>② छाँट गुणी, पार्टे जुटी<br>③ कौन किसका?</span>
+                        <span class="limit-tag" data-lang="en" style="display:none;">① Weight impact<br>② Sort quality<br>③ Who uses what?</span>
+                        <span class="limit-tag" data-lang="mr" style="display:none;">① वजनावर परिणाम<br>② गुणवत्ता वर्गीकरण</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong data-lang="hi">हवाला</strong><span data-lang="en" style="display:none;"><strong>Dried Herbs Mix</strong></span><span data-lang="mr" style="display:none;"><strong>वाळवलेल्या वनस्पती</strong></span></td>
+                    <td><span data-lang="hi">मोटा पीसें</span><span data-lang="en" style="display:none;">Coarsely grind</span><span data-lang="mr" style="display:none;">जाड दळा</span></td>
+                    <td><span data-lang="hi">10-20 ग्राम/दिन</span><span data-lang="en" style="display:none;">10-20g/day</span><span data-lang="mr" style="display:none;">10-20 ग्रॅम/दिवस</span></td>
+                    <td><span data-lang="hi">हवाबंद डिब्बा, छाया में</span><span data-lang="en" style="display:none;">Airtight, in shade</span><span data-lang="mr" style="display:none;">हवाबंद डब्बा, सावलीत</span></td>
+                    <td><span class="limit-tag" data-lang="hi">30 दिन तक</span><span class="limit-tag" data-lang="en" style="display:none;">Up to 30 days</span><span class="limit-tag" data-lang="mr" style="display:none;">30 दिवसांपर्यंत</span></td>
+                </tr>
+                <tr>
+                    <td><strong data-lang="hi">अनाज (आटा)</strong><span data-lang="en" style="display:none;"><strong>Grain Flour</strong></span><span data-lang="mr" style="display:none;"><strong>धान्य (पीठ)</strong></span></td>
+                    <td><span data-lang="hi">ताजा पीसें (चक्की)</span><span data-lang="en" style="display:none;">Fresh grind (mill)</span><span data-lang="mr" style="display:none;">ताजे दळा (गिरणी)</span></td>
+                    <td><span data-lang="hi">साप्ताहिक आवश्यकता</span><span data-lang="en" style="display:none;">Weekly requirement</span><span data-lang="mr" style="display:none;">साप्ताहिक गरज</span></td>
+                    <td><span data-lang="hi">हवाबंद डिब्बा (1 सप्ताह)</span><span data-lang="en" style="display:none;">Airtight (1 week)</span><span data-lang="mr" style="display:none;">हवाबंद (1 आठवडा)</span></td>
+                    <td><span class="limit-tag" data-lang="hi">7 दिन</span><span class="limit-tag" data-lang="en" style="display:none;">7 days</span><span class="limit-tag" data-lang="mr" style="display:none;">7 दिवस</span></td>
+                </tr>
+                <tr>
+                    <td><strong data-lang="hi">बीज (Seeds)</strong><span data-lang="en" style="display:none;"><strong>Seeds</strong></span><span data-lang="mr" style="display:none;"><strong>बी</strong></span></td>
+                    <td><span data-lang="hi">भूनकर / कूटकर</span><span data-lang="en" style="display:none;">Roast & pound</span><span data-lang="mr" style="display:none;">भाजून / कुटून</span></td>
+                    <td><span data-lang="hi">5-10 ग्राम/दिन</span><span data-lang="en" style="display:none;">5-10g/day</span><span data-lang="mr" style="display:none;">5-10 ग्रॅम/दिवस</span></td>
+                    <td><span data-lang="hi">कांच की शीशी में</span><span data-lang="en" style="display:none;">In glass jar</span><span data-lang="mr" style="display:none;">काचेच्या बाटलीत</span></td>
+                    <td><span class="limit-tag" data-lang="hi">15 दिन</span><span class="limit-tag" data-lang="en" style="display:none;">15 days</span><span class="limit-tag" data-lang="mr" style="display:none;">15 दिवस</span></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <!-- Season & Disease wise dry prep -->
+    <div class="dp-section">
+        <div class="dp-section-title">
+            <span>🌤️</span>
+            <span data-lang="hi">ऋतु / बीमारी अनुसार सूखी तैयारी</span>
+            <span data-lang="en" style="display:none;">Season / Disease wise Dry Preparation</span>
+            <span data-lang="mr" style="display:none;">ऋतू / आजारानुसार सुकी तयारी</span>
+        </div>
+        <div class="dp-season-grid">
+            <div class="dp-season-card winter">
+                <div class="ds-season-header">❄️ <span data-lang="hi">शीत ऋतु</span><span data-lang="en" style="display:none;">Winter</span><span data-lang="mr" style="display:none;">हिवाळा</span></div>
+                <div class="ds-item-list" data-lang="hi">• बाजरे का आटा<br>• तिल मिक्स<br>• गुड़ + अदरक चूर्ण<br>• सोंठ + काली मिर्च + पिप्पली (त्रिकटु)<br>• मेथी दाना भूना</div>
+                <div class="ds-item-list" data-lang="en" style="display:none;">• Bajra flour<br>• Sesame mix<br>• Jaggery + Ginger powder<br>• Trikatu (Dry ginger+Pepper+Pippali)<br>• Roasted fenugreek seeds</div>
+                <div class="ds-item-list" data-lang="mr" style="display:none;">• बाजरी पीठ<br>• तीळ मिक्स<br>• गूळ + आलं चूर्ण<br>• सोंठ + काळी मिरी + पिप्पली<br>• भाजलेले मेथ्याचे दाणे</div>
+            </div>
+            <div class="dp-season-card summer">
+                <div class="ds-season-header">☀️ <span data-lang="hi">ग्रीष्म ऋतु</span><span data-lang="en" style="display:none;">Summer</span><span data-lang="mr" style="display:none;">उन्हाळा</span></div>
+                <div class="ds-item-list" data-lang="hi">• धनिया + जीरा चूर्ण<br>• सौंफ + मिश्री पाउडर<br>• आंवला चूर्ण<br>• इलायची + केसर मिक्स<br>• गुलाब पत्ती सूखी</div>
+                <div class="ds-item-list" data-lang="en" style="display:none;">• Coriander + Cumin powder<br>• Fennel + Rock sugar powder<br>• Amla powder<br>• Cardamom + Saffron mix<br>• Dried rose petals</div>
+                <div class="ds-item-list" data-lang="mr" style="display:none;">• धणे + जिरे पावडर<br>• बडीशेप + खडीसाखर<br>• आवळा चूर्ण<br>• वेलची + केशर मिक्स</div>
+            </div>
+            <div class="dp-season-card rainy">
+                <div class="ds-season-header">🌧️ <span data-lang="hi">वर्षा ऋतु</span><span data-lang="en" style="display:none;">Monsoon</span><span data-lang="mr" style="display:none;">पावसाळा</span></div>
+                <div class="ds-item-list" data-lang="hi">• हल्दी + काली मिर्च मिक्स<br>• अदरक + तुलसी चूर्ण<br>• अजवाइन पाउडर<br>• मूंग दाल भूनी<br>• सौंठ + हल्दी काढ़ा चूर्ण</div>
+                <div class="ds-item-list" data-lang="en" style="display:none;">• Turmeric + Black pepper mix<br>• Ginger + Tulsi powder<br>• Carom seed powder<br>• Roasted moong dal<br>• Dry ginger + Turmeric kadha powder</div>
+                <div class="ds-item-list" data-lang="mr" style="display:none;">• हळद + काळी मिरी मिक्स<br>• आलं + तुळस चूर्ण<br>• ओवा पावडर<br>• भाजलेली मूग डाळ</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- D.Fruits & Seeds -->
+    <div class="dp-section">
+        <div class="dp-section-title">
+            <span>🥜</span>
+            <span data-lang="hi">D. Fruits — Seeds तैयारी</span>
+            <span data-lang="en" style="display:none;">Dry Fruits & Seeds Preparation</span>
+            <span data-lang="mr" style="display:none;">सुके मेवे आणि बी तयारी</span>
+        </div>
+        <div class="dp-fruits-grid">
+            <div class="dp-fruit-card">
+                <div class="dp-fruit-name">🌰 <span data-lang="hi">बादाम</span><span data-lang="en" style="display:none;">Almonds</span><span data-lang="mr" style="display:none;">बदाम</span></div>
+                <div class="dp-fruit-method" data-lang="hi">रात भर भिगोएं → छिलका उतारें → सुखाएं → स्टोर करें</div>
+                <div class="dp-fruit-method" data-lang="en" style="display:none;">Soak overnight → peel → dry → store</div>
+                <div class="dp-fruit-method" data-lang="mr" style="display:none;">रात्रभर भिजवा → सोलून टाका → वाळवा → साठवा</div>
+            </div>
+            <div class="dp-fruit-card">
+                <div class="dp-fruit-name">🌿 <span data-lang="hi">मखाना</span><span data-lang="en" style="display:none;">Fox Nuts</span><span data-lang="mr" style="display:none;">मखाना</span></div>
+                <div class="dp-fruit-method" data-lang="hi">धीमी आंच पर भूनें → ठंडा करें → हवाबंद डिब्बे में</div>
+                <div class="dp-fruit-method" data-lang="en" style="display:none;">Roast on low heat → cool → store airtight</div>
+                <div class="dp-fruit-method" data-lang="mr" style="display:none;">मंद आचेवर भाजा → थंड करा → हवाबंद डब्यात</div>
+            </div>
+            <div class="dp-fruit-card">
+                <div class="dp-fruit-name">🌱 <span data-lang="hi">तिल</span><span data-lang="en" style="display:none;">Sesame</span><span data-lang="mr" style="display:none;">तीळ</span></div>
+                <div class="dp-fruit-method" data-lang="hi">धोएं → सुखाएं → हल्का भूनें → ठंडा करें → स्टोर</div>
+                <div class="dp-fruit-method" data-lang="en" style="display:none;">Wash → dry → lightly roast → cool → store</div>
+                <div class="dp-fruit-method" data-lang="mr" style="display:none;">धुवा → वाळवा → हलके भाजा → थंड करा → साठवा</div>
+            </div>
+            <div class="dp-fruit-card">
+                <div class="dp-fruit-name">☀️ <span data-lang="hi">किशमिश / मुनक्का</span><span data-lang="en" style="display:none;">Raisins</span><span data-lang="mr" style="display:none;">मनुका / मुनक्का</span></div>
+                <div class="dp-fruit-method" data-lang="hi">धोएं → भिगोएं (2 घंटे) → छानें → उपयोग करें</div>
+                <div class="dp-fruit-method" data-lang="en" style="display:none;">Wash → soak (2 hrs) → drain → use</div>
+                <div class="dp-fruit-method" data-lang="mr" style="display:none;">धुवा → भिजवा (2 तास) → गाळा → वापरा</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.dp-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.dp-section-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dp-table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+.dp-table thead tr { background: #2c5aa0; color: white; }
+.dp-table th { padding: 10px 12px; text-align: left; font-weight: 600; }
+.dp-table td { padding: 10px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+.dp-table tr:hover { background: #f5f5f5; }
+.limit-tag { font-size: 0.82em; color: #555; line-height: 1.5; }
+.dp-season-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; }
+.dp-season-card { border-radius: 10px; padding: 16px; }
+.dp-season-card.winter { background: #e3f2fd; border-left: 4px solid #1565c0; }
+.dp-season-card.summer { background: #fff8e1; border-left: 4px solid #f57f17; }
+.dp-season-card.rainy  { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+.ds-season-header { font-weight: 700; font-size: 1em; margin-bottom: 10px; }
+.ds-item-list { font-size: 0.84em; line-height: 1.8; color: #555; }
+.dp-fruits-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+.dp-fruit-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 14px; }
+.dp-fruit-name { font-weight: 700; font-size: 0.95em; margin-bottom: 8px; }
+.dp-fruit-method { font-size: 0.83em; color: #555; line-height: 1.6; }
+@media(max-width:768px) {
+    .dp-season-grid { grid-template-columns: 1fr; }
+    .dp-fruits-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+let dpLoaded = false;
+
+async function loadDryPrepTab() {
+    if (dpLoaded) return;
+    const lang = window.currentLang || 'hi';
+    try {
+        const res  = await fetch(`/api/all-foods?lang=${lang}`);
+        const data = await res.json();
+        if (!data.success) return;
+
+        // Show only dry_fruit, spice, grain (types suitable for dry prep)
+        const dryTypes = ['dry_fruit', 'spice', 'grain', 'sweetener'];
+        const items = data.items.filter(i => dryTypes.includes(i.type_code));
+
+        if (!items.length) return;
+        document.getElementById('dp-db-section').style.display = '';
+
+        const grid = document.getElementById('dpDbGrid');
+        grid.innerHTML = items.map(item => `
+            <div class="dp-fruit-card">
+                <div class="dp-fruit-name">${item.type_icon} <span>${item.name}</span></div>
+                <div class="dp-fruit-method" data-lang="hi">
+                    ${item.is_laghu ? '✓ लघु (हल्का)' : ''}
+                    ${item.is_guru  ? '✓ गुरु (भारी)' : ''}
+                    ${item.is_garm  ? '✓ गर्म' : ''}
+                    ${item.is_thanda? '✓ ठंडा' : ''}
+                    ${item.sub_category ? ' | ' + item.sub_category : ''}
+                </div>
+            </div>
+        `).join('');
+        dpLoaded = true;
+    } catch(e) { console.error(e); }
+}
+</script>
