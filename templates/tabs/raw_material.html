@@ -303,3 +303,102 @@ async function loadRawMaterialTab(foodData) {
     gap: 8px;
 }
 </style>
+<style>
+/* ══ MOBILE OVERRIDES — raw_material.html ══════════════════
+   Only applied at max-width:899px (desktop unchanged above 900px)
+════════════════════════════════════════════════════════════ */
+@media(max-width:899px) {
+
+    /* Page header — compact row */
+    .tab-page-header {
+        padding: 14px 16px;
+        font-size: 1.4em;
+        gap: 10px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+    .tab-page-header h2 { font-size: 0.78em; }
+    .tab-page-header p  { font-size: 0.44em; }
+
+    /* Section cards */
+    .rm-section {
+        padding: 14px 14px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+    .rm-section-title {
+        font-size: 0.97em;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+
+    /* Purchase order chips — horizontal scroll strip */
+    #purchaseOrderGrid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+        padding-bottom: 4px;
+    }
+    #purchaseOrderGrid::-webkit-scrollbar { display: none; }
+    .po-chip {
+        flex-shrink: 0;
+        min-width: 100px;
+        max-width: 140px;
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+    .po-name { font-size: 0.85em; }
+    .po-type { font-size: 0.7em; }
+
+    /* Empty state */
+    .rm-empty-state { font-size: 1em; padding: 20px; }
+    .rm-empty-state p { font-size: 0.7em; }
+
+    /* Category grid — single column stacked list on mobile */
+    .rm-category-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+    .rm-category-card {
+        border-radius: 10px;
+    }
+    .rm-cat-header {
+        padding: 10px 12px;
+        font-size: 0.92em;
+    }
+    .rm-cat-body {
+        padding: 10px 12px;
+        font-size: 0.85em;
+        min-height: unset;
+    }
+    /* Ingredient chips — wrap nicely */
+    .rm-chip {
+        font-size: 0.8em;
+        padding: 4px 10px;
+        margin: 3px 2px;
+        border-radius: 100px;
+        background: #f0f0f0;
+        border-color: #ddd;
+    }
+
+    /* Vitamin cards — vertical stack with horizontal accent bar on top */
+    .vitamin-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+    .vitamin-card {
+        padding: 14px 16px;
+        border-left: none !important;
+        border-top: 4px solid;
+        border-radius: 12px;
+    }
+    .vitamin-card.heavy { border-top-color: #ff9800; }
+    .vitamin-card.light  { border-top-color: #4caf50; }
+    .vitamin-card.medium { border-top-color: #2196f3; }
+    .vitamin-label { font-size: 0.92em; margin-bottom: 6px; }
+    .vitamin-items { font-size: 0.82em; line-height: 1.7; }
+}
+</style>

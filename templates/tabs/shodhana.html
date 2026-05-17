@@ -332,3 +332,70 @@ async function loadShodhanaTab() {
     }
 }
 </script>
+<style>
+/* ══ MOBILE OVERRIDES — shodhana.html ═════════════════════
+   Only applied at max-width:899px (desktop unchanged)
+════════════════════════════════════════════════════════════ */
+@media(max-width:899px) {
+
+    /* Page header */
+    .sh-page-header {
+        padding: 14px 16px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+    }
+    .sh-header-title { font-size: 1em; }
+    .sh-header-sub   { font-size: 0.82em; margin-top: 4px; }
+
+    /* ── 7-step cards: vertical numbered pills instead of wide cards ── */
+    .sh-steps-box {
+        padding: 14px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+    }
+    .sh-steps-title { font-size: 0.92em; margin-bottom: 10px; }
+    .sh-steps-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        flex-wrap: unset;
+    }
+    .sh-step-card {
+        min-width: unset !important;
+        flex: unset !important;
+        padding: 10px 12px;
+        font-size: 0.82em;
+        border-radius: 0 10px 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1.3;
+    }
+    .sh-step-card strong {
+        font-size: 0.9em;
+        white-space: nowrap;
+    }
+
+    /* ── Main table → mobile card view (hide table, show cards) ── */
+    .sh-table-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        overflow: hidden;
+    }
+
+    /* Hide the wide table on mobile */
+    .sh-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .sh-main-table { min-width: 700px; font-size: 0.78em; }
+
+    /* Step header cells — more compact */
+    .th-group    { padding: 9px 10px; font-size: 0.82em; min-width: 80px; }
+    .th-subgroup { padding: 9px 10px; font-size: 0.82em; min-width: 90px; }
+    .th-item     { padding: 9px 10px; font-size: 0.82em; min-width: 100px; }
+    .th-step     { padding: 6px 6px;  font-size: 0.72em; min-width: 52px; }
+
+    /* Body cells */
+    .sh-main-table td { padding: 7px 8px; font-size: 0.82em; }
+    .sh-check { font-size: 0.95em; }
+    .sh-req   { font-size: 0.7em; }
+}
+</style>

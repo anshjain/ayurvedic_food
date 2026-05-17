@@ -230,3 +230,99 @@ async function loadDryPrepTab() {
     } catch(e) { console.error(e); }
 }
 </script>
+<style>
+/* ══ MOBILE OVERRIDES — dry_preparation.html ══════════════
+   Only applied at max-width:899px (desktop unchanged)
+════════════════════════════════════════════════════════════ */
+@media(max-width:899px) {
+
+    /* Page header */
+    .tab-page-header {
+        padding: 14px 16px;
+        font-size: 1.4em;
+        gap: 10px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+    .tab-page-header h2 { font-size: 0.78em; }
+    .tab-page-header p  { font-size: 0.44em; }
+
+    /* Section cards */
+    .dp-section {
+        padding: 14px 14px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+    .dp-section-title {
+        font-size: 0.97em;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+
+    /* ── Preparation steps table → horizontal scroll with compact cells ── */
+    .dp-table {
+        font-size: 0.78em;
+        min-width: 560px;
+    }
+    .dp-table th { padding: 8px 9px; font-size: 0.85em; }
+    .dp-table td { padding: 8px 9px; font-size: 0.82em; }
+    .limit-tag  { font-size: 0.78em; line-height: 1.5; }
+
+    /* ── Season cards — vertical stack, accent on top instead of left ── */
+    .dp-season-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+    .dp-season-card {
+        border-left: none !important;
+        border-top: 4px solid;
+        border-radius: 12px;
+        padding: 14px 16px;
+    }
+    .dp-season-card.winter { border-top-color: #1565c0; }
+    .dp-season-card.summer { border-top-color: #f57f17; }
+    .dp-season-card.rainy  { border-top-color: #2e7d32; }
+
+    .ds-season-header {
+        font-size: 1em;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .ds-item-list {
+        font-size: 0.84em;
+        line-height: 1.9;
+        color: #444;
+    }
+
+    /* ── Dry fruits/seeds grid — 2-col on mobile, better card style ── */
+    .dp-fruits-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px;
+    }
+    .dp-fruit-card {
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #e8e0d5;
+        background: #fafaf8;
+    }
+    .dp-fruit-name {
+        font-size: 0.88em;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .dp-fruit-method {
+        font-size: 0.77em;
+        line-height: 1.65;
+        color: #555;
+    }
+
+    /* DB-driven dry items grid — also 2-col */
+    #dpDbGrid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+</style>
