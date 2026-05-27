@@ -1,0 +1,327 @@
+<!-- File: templates/tabs/harmful_combinations.html -->
+<div class="tab-content-inner" id="tab-harmful-combo">
+
+    <div class="tab-page-header">
+        <span>⚠️</span>
+        <div>
+            <h2 data-lang="hi">हानिकारक संयोजन (कॉम्बिनेशन)</h2>
+            <h2 data-lang="en" style="display:none;">Harmful Food Combinations</h2>
+            <h2 data-lang="mr" style="display:none;">हानिकारक संयोजन (कॉम्बिनेशन)</h2>
+            <p data-lang="hi">विरुद्ध आहार — ये संयोजन पाचन बिगाड़ते हैं, इन्हें एक साथ न दें</p>
+            <p data-lang="en" style="display:none;">Viruddha Ahara — these combinations disturb digestion, never serve together</p>
+            <p data-lang="mr" style="display:none;">विरुद्ध आहार — हे संयोजन पचन बिघडवतात, एकत्र देऊ नका</p>
+        </div>
+    </div>
+
+    <!-- Warning banner -->
+    <div class="hx-warning-bar">
+        <span style="font-size:1.3em;">&#128683;</span>
+        <div>
+            <div style="font-weight:700;" data-lang="hi">विरुद्ध आहार — स्वास्थ्य के लिए हानिकारक</div>
+            <div style="font-weight:700;" data-lang="en" style="display:none;">Viruddha Ahara — Harmful to Health</div>
+            <div style="font-weight:700;" data-lang="mr" style="display:none;">विरुद्ध आहार — आरोग्यासाठी हानिकारक</div>
+            <div style="font-size:0.88em;margin-top:2px;" data-lang="hi">नीचे दिए गए खाद्य पदार्थ एक साथ या तुरंत बाद में न दें</div>
+            <div style="font-size:0.88em;margin-top:2px;" data-lang="en" style="display:none;">Do not serve the food items below together or immediately after each other</div>
+            <div style="font-size:0.88em;margin-top:2px;" data-lang="mr" style="display:none;">खालील पदार्थ एकत्र किंवा लगेच नंतर देऊ नका</div>
+        </div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="hx-search-wrap">
+        <span class="hx-search-icon">&#128269;</span>
+        <input class="hx-search-input" id="hx-search" type="text"
+               placeholder="खोजें... (e.g. दही, दूध, फल)"
+               oninput="hxFilter(this.value)" autocomplete="off">
+        <button class="hx-search-clear" id="hx-clear" onclick="hxClear()" style="display:none;">&#10005;</button>
+    </div>
+
+    <!-- Quick-jump chips -->
+    <div class="hx-quickjump" id="hx-quickjump"></div>
+
+    <!-- Stats bar -->
+    <div class="hx-stats-bar" id="hx-stats" style="display:none;">
+        <div class="hx-stat">
+            <span class="hx-stat-num" id="hx-total">0</span>
+            <span data-lang="hi">हानिकारक समूह</span><span data-lang="en" style="display:none">Harmful Groups</span><span data-lang="mr" style="display:none">हानिकारक गट</span>
+        </div>
+        <div class="hx-stat-divider"></div>
+        <div class="hx-stat" style="color:#c62828;">
+            <span>&#128683;</span>
+            <span data-lang="hi">दही/छाछ/दूध — सबसे आम विरुद्ध आहार</span>
+            <span data-lang="en" style="display:none">Curd/Buttermilk/Milk — most common viruddha</span>
+            <span data-lang="mr" style="display:none">दही/ताक/दूध — सर्वात सामान्य विरुद्ध आहार</span>
+        </div>
+        <div class="hx-stat-divider"></div>
+        <div class="hx-stat hx-tip-toggle" onclick="document.getElementById('hx-tip').classList.toggle('hx-tip-open')">
+            <span>&#128161;</span>
+            <span data-lang="hi">उपयोग टिप देखें</span><span data-lang="en" style="display:none">View usage tip</span><span data-lang="mr" style="display:none">वापर टिप पहा</span>
+        </div>
+    </div>
+
+    <!-- Collapsible tip -->
+    <div class="hx-tip" id="hx-tip">
+        <div data-lang="hi">&#128204; <b>कैसे पढ़ें:</b> लाल चिप्स = इनके साथ न दें। हरी चिप्स = इसके बजाय दें। नीली चिप्स = कारण। कार्ड क्लिक करने पर खुलेगा।</div>
+        <div data-lang="en" style="display:none">&#128204; <b>How to read:</b> Red chips = do not combine with. Green chips = give these instead. Blue chips = reason why. Click any card to expand.</div>
+        <div data-lang="mr" style="display:none">&#128204; <b>कसे वाचावे:</b> लाल चिप्स = यांच्यासोबत देऊ नका. हिरव्या चिप्स = त्याऐवजी द्या. निळ्या चिप्स = कारण. कार्डवर क्लिक करा.</div>
+    </div>
+
+    <!-- Loading -->
+    <div id="hx-loading" style="text-align:center;padding:60px;color:#888;">
+        <div style="font-size:2.5em;margin-bottom:12px;animation:hxSpin 1.5s linear infinite;display:inline-block;">&#127807;</div>
+        <div data-lang="hi">लोड हो रहा है...</div>
+        <div data-lang="en" style="display:none">Loading...</div>
+        <div data-lang="mr" style="display:none">लोड होत आहे...</div>
+    </div>
+
+    <!-- No results -->
+    <div id="hx-noresult" style="display:none;text-align:center;padding:40px;color:#888;">
+        <div style="font-size:2em;">&#128269;</div>
+        <div data-lang="hi">कोई परिणाम नहीं मिला</div>
+        <div data-lang="en" style="display:none">No results found</div>
+        <div data-lang="mr" style="display:none">कोणताही निकाल सापडला नाही</div>
+    </div>
+
+    <!-- Cards -->
+    <div id="hx-grid"></div>
+
+</div>
+
+{% raw %}
+<style>
+/* ── Warning bar ── */
+.hx-warning-bar{background:linear-gradient(135deg,#fff3cd,#ffe0b2);border:1.5px solid #ffa726;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;color:#6d3b00;}
+
+/* ── Search ── */
+.hx-search-wrap{position:relative;display:flex;align-items:center;background:white;border-radius:50px;box-shadow:0 2px 12px rgba(0,0,0,0.1);padding:10px 18px;margin-bottom:14px;border:2px solid transparent;transition:border-color .2s;}
+.hx-search-wrap:focus-within{border-color:#e53935;}
+.hx-search-icon{font-size:1.1em;color:#999;margin-right:10px;flex-shrink:0;}
+.hx-search-input{flex:1;border:none;outline:none;font-size:1em;background:transparent;color:#333;}
+.hx-search-clear{background:none;border:none;cursor:pointer;color:#999;font-size:1.1em;padding:0 4px;}
+
+/* ── Quick-jump ── */
+.hx-quickjump{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.hx-qchip{padding:5px 13px;border-radius:50px;font-size:0.8em;font-weight:600;background:#fff5f5;color:#c62828;border:1.5px solid #ffcdd2;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.hx-qchip:hover,.hx-qchip.active{background:#e53935;color:white;border-color:#e53935;}
+
+/* ── Stats bar ── */
+.hx-stats-bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:white;border-radius:12px;padding:12px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-size:0.83em;color:#555;}
+.hx-stat{display:flex;align-items:center;gap:6px;font-weight:600;}
+.hx-stat-num{font-size:1.3em;font-weight:800;color:#e53935;}
+.hx-stat-divider{width:1px;height:22px;background:#e0e0e0;}
+.hx-tip-toggle{cursor:pointer;color:#f57f17;}
+.hx-tip-toggle:hover{text-decoration:underline;}
+
+/* ── Tip box ── */
+.hx-tip{display:none;background:#fff8e1;border-left:4px solid #ffa726;border-radius:0 10px 10px 0;padding:12px 16px;margin-bottom:14px;font-size:0.87em;color:#555;line-height:1.6;}
+.hx-tip.hx-tip-open{display:block;}
+
+/* ── Accordion cards ── */
+#hx-grid{display:flex;flex-direction:column;gap:10px;}
+.hx-card{background:white;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,0.07);overflow:hidden;border-left:5px solid #e53935;transition:box-shadow .2s;}
+.hx-card:hover{box-shadow:0 4px 18px rgba(229,57,53,0.18);}
+.hx-card-header{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;background:white;transition:background .15s;}
+.hx-card-header:hover{background:#fff8f8;}
+.hx-card-icon{font-size:1.4em;flex-shrink:0;width:36px;text-align:center;}
+.hx-card-num{background:#e53935;color:white;border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8em;font-weight:800;flex-shrink:0;}
+.hx-card-title{font-weight:700;font-size:0.97em;color:#3a1010;flex:1;line-height:1.3;}
+.hx-card-arrow{color:#aaa;font-size:0.9em;transition:transform .25s;flex-shrink:0;}
+.hx-card.open .hx-card-arrow{transform:rotate(180deg);}
+.hx-card-body{display:none;padding:0 18px 16px 18px;border-top:1px solid #fff0f0;}
+.hx-card.open .hx-card-body{display:block;}
+
+/* ── Sub-group badge ── */
+.hx-subgroup{display:inline-block;background:#fff5f5;color:#c62828;border-radius:20px;padding:3px 10px;font-size:0.76em;font-weight:700;margin:10px 0 4px 0;border:1px solid #ffcdd2;}
+
+/* ── Combination row — visual X line ── */
+.hx-combo-row{display:flex;align-items:stretch;gap:0;margin-top:12px;border-radius:10px;overflow:hidden;border:1px solid #f0f0f0;}
+.hx-combo-food{background:#fafafa;padding:10px 14px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.88em;color:#333;min-width:80px;}
+.hx-combo-x{background:#e53935;color:white;display:flex;align-items:center;justify-content:center;padding:0 12px;font-size:1.1em;font-weight:900;flex-shrink:0;}
+.hx-combo-avoid{background:#fff5f5;flex:1;padding:10px 12px;}
+.hx-combo-avoid-label{font-size:0.7em;font-weight:800;text-transform:uppercase;color:#c62828;margin-bottom:5px;letter-spacing:0.5px;}
+
+/* ── Three-column flow ── */
+.hx-flow{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.hx-flow-col{flex:1;min-width:130px;border-radius:10px;padding:10px 12px;}
+.hx-flow-col.avoid-col{background:#fff5f5;border:1px solid #ffcdd2;}
+.hx-flow-col.alt-col{background:#edf7ed;border:1px solid #a5d6a7;}
+.hx-flow-col.reason-col{background:#e8f4fd;border:1px solid #bbdefb;}
+.hx-flow-label{font-size:0.72em;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.hx-flow-label.avoid{color:#c62828;}
+.hx-flow-label.alt{color:#2e7d32;}
+.hx-flow-label.reason{color:#1565c0;}
+.hx-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.hx-chip{padding:4px 10px;border-radius:20px;font-size:0.78em;font-weight:500;line-height:1.4;}
+.hx-chip-avoid{background:#ffebee;color:#c62828;border:1px solid #ffcdd2;}
+.hx-chip-alt{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;}
+.hx-chip-reason{background:#e3f2fd;color:#1565c0;border:1px solid #bbdefb;}
+
+/* ── Sub divider ── */
+.hx-sub-divider{border:none;border-top:1px dashed #ffe0e0;margin:12px 0;}
+
+@keyframes hxSpin{to{transform:rotate(360deg);}}
+</style>
+
+<script>
+(function(){
+var _hxData = [];
+var _hxLang = 'hi';
+var _hxOpen = {};
+
+var GROUP_ICONS = {
+    1:'&#129367;', 2:'&#129382;', 3:'&#129379;', 4:'&#127803;',
+    5:'&#127807;', 6:'&#127798;', 7:'&#129371;', 8:'&#129381;',
+    9:'&#127985;', 10:'&#127820;', 11:'&#129380;', 12:'&#127859;',
+    13:'&#129371;', 14:'&#127815;', 15:'&#127856;', 16:'&#129366;',
+    17:'&#129372;', 18:'&#129371;'
+};
+
+window._loadHarmfulCombinations = function(lang){
+    _hxLang = lang || (document.documentElement.getAttribute('data-active-lang') || 'hi');
+    document.getElementById('hx-loading').style.display='block';
+    document.getElementById('hx-grid').style.display='none';
+    document.getElementById('hx-stats').style.display='none';
+    fetch('/api/harmful-combinations?lang='+_hxLang)
+        .then(function(r){return r.json();})
+        .then(function(data){
+            if(!data.success){return;}
+            _hxData = data.data;
+            document.getElementById('hx-loading').style.display='none';
+            document.getElementById('hx-stats').style.display='flex';
+            document.getElementById('hx-total').textContent = countGroups(_hxData);
+            buildQuickJump(_hxData);
+            renderCards(_hxData);
+        }).catch(function(){
+            document.getElementById('hx-loading').innerHTML='<div style="color:#c62828">&#9888; लोड करने में त्रुटि</div>';
+        });
+};
+
+function countGroups(rows){
+    var seen={};
+    rows.forEach(function(r){seen[r.group_number]=1;});
+    return Object.keys(seen).length;
+}
+
+function buildQuickJump(rows){
+    var seen={}, order=[];
+    rows.forEach(function(r){
+        if(!seen[r.group_number]){seen[r.group_number]=r.group_name; order.push(r.group_number);}
+    });
+    var html='';
+    order.forEach(function(num){
+        html += '<span class="hx-qchip" onclick="hxJump('+num+')" id="hxq-'+num+'">'
+              + (GROUP_ICONS[num]||'&#128683;') + ' ' + esc(seen[num]) + '</span>';
+    });
+    document.getElementById('hx-quickjump').innerHTML = html;
+}
+
+function renderCards(rows, filter){
+    var grid = document.getElementById('hx-grid');
+    var groups={}, order=[];
+    rows.forEach(function(r){
+        if(!groups[r.group_number]){groups[r.group_number]={num:r.group_number,name:r.group_name,rows:[]};order.push(r.group_number);}
+        groups[r.group_number].rows.push(r);
+    });
+
+    var filtered = order;
+    if(filter && filter.trim()){
+        var q = filter.trim().toLowerCase();
+        filtered = order.filter(function(num){
+            var g = groups[num];
+            var text = g.name+' '+g.rows.map(function(r){
+                return [r.sub_group,r.avoid_with,r.alternative,r.reason].join(' ');
+            }).join(' ');
+            return text.toLowerCase().indexOf(q) > -1;
+        });
+    }
+
+    document.getElementById('hx-noresult').style.display = filtered.length ? 'none' : 'block';
+    grid.style.display = filtered.length ? 'flex' : 'none';
+
+    var html='';
+    filtered.forEach(function(num){
+        var g = groups[num];
+        var isOpen = !!_hxOpen[num];
+        html += '<div class="hx-card'+(isOpen?' open':'')+'" id="hxc-'+num+'">'
+              + '<div class="hx-card-header" onclick="hxToggle('+num+')">'
+              + '<div class="hx-card-icon">'+(GROUP_ICONS[num]||'&#128683;')+'</div>'
+              + '<div class="hx-card-num">'+num+'</div>'
+              + '<div class="hx-card-title">'+esc(g.name)+'</div>'
+              + '<div class="hx-card-arrow">&#9660;</div>'
+              + '</div>'
+              + '<div class="hx-card-body">'+buildCardBody(g.rows)+'</div>'
+              + '</div>';
+    });
+    grid.innerHTML = html;
+}
+
+function buildCardBody(rows){
+    var html='';
+    var avoidL  = _hxLang==='en'?'Avoid with/after':_hxLang==='mr'?'\u0938\u094b\u092c\u0924/\u0928\u0902\u0924\u0930 \u0928\u0915\u093e':'\u0915\u0947 \u0938\u093e\u0925 \u0928 \u0926\u0947\u0902';
+    var altL    = _hxLang==='en'?'Give instead':_hxLang==='mr'?'\u0924\u094d\u092f\u093e\u090a\u0935\u091c\u0940':'\u092b\u093f\u0930 \u0915\u094d\u092f\u093e \u0926\u0947\u0902?';
+    var reasonL = _hxLang==='en'?'Why avoid?':_hxLang==='mr'?'\u0915\u093e \u0926\u0947\u0909 \u0928\u0915\u093e?':'\u0915\u094d\u092f\u094b\u0902 \u0928 \u0926\u0947\u0902?';
+
+    rows.forEach(function(row, idx){
+        if(idx>0) html += '<hr class="hx-sub-divider">';
+        if(row.sub_group) html += '<span class="hx-subgroup">&#128204; '+esc(row.sub_group)+'</span>';
+
+        html += '<div class="hx-flow">';
+        if(row.avoid_with){
+            html += '<div class="hx-flow-col avoid-col">'
+                  + '<div class="hx-flow-label avoid">&#128683; '+avoidL+'</div>'
+                  + '<div class="hx-chips">'+chips(row.avoid_with,'hx-chip-avoid')+'</div>'
+                  + '</div>';
+        }
+        if(row.alternative){
+            html += '<div class="hx-flow-col alt-col">'
+                  + '<div class="hx-flow-label alt">&#9989; '+altL+'</div>'
+                  + '<div class="hx-chips">'+chips(row.alternative,'hx-chip-alt')+'</div>'
+                  + '</div>';
+        }
+        if(row.reason){
+            html += '<div class="hx-flow-col reason-col">'
+                  + '<div class="hx-flow-label reason">&#128161; '+reasonL+'</div>'
+                  + '<div class="hx-chips">'+chips(row.reason,'hx-chip-reason')+'</div>'
+                  + '</div>';
+        }
+        html += '</div>';
+    });
+    return html;
+}
+
+window.hxToggle = function(num){
+    _hxOpen[num] = !_hxOpen[num];
+    var card = document.getElementById('hxc-'+num);
+    if(card) card.className = 'hx-card'+(_hxOpen[num]?' open':'');
+};
+
+window.hxJump = function(num){
+    _hxOpen[num] = true;
+    var card = document.getElementById('hxc-'+num);
+    if(!card){ return; }
+    card.className = 'hx-card open';
+    card.scrollIntoView({behavior:'smooth', block:'start'});
+    document.querySelectorAll('.hx-qchip').forEach(function(c){c.classList.remove('active');});
+    var qc = document.getElementById('hxq-'+num);
+    if(qc) qc.classList.add('active');
+};
+
+window.hxFilter = function(val){
+    document.getElementById('hx-clear').style.display = val ? 'inline' : 'none';
+    renderCards(_hxData, val);
+};
+
+window.hxClear = function(){
+    document.getElementById('hx-search').value='';
+    document.getElementById('hx-clear').style.display='none';
+    renderCards(_hxData, '');
+};
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function chips(text, cls){
+    return text.split('\n').filter(function(x){return x.trim();}).map(function(item){
+        return '<span class="hx-chip '+cls+'">'+esc(item.trim())+'</span>';
+    }).join('');
+}
+})();
+</script>
+{% endraw %}
