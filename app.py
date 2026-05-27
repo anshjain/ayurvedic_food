@@ -162,6 +162,72 @@ class FoodItem(db.Model):
                 return result.is_beneficial if result else None
         return None
 
+class HealthyCombination(db.Model):
+    """
+    Healthy food combinations (हेल्दी संयोजन) — based on Ahar Charya guidelines.
+    Each row represents one food group with its recommended companions.
+    """
+    __tablename__ = 'healthy_combinations'
+
+    id            = db.Column(db.Integer, primary_key=True)
+    group_number  = db.Column(db.Integer, nullable=False)          # 1, 2, 3 …
+    group_name_hi = db.Column(db.String(200), nullable=False)       # e.g. रोटी / पराठा
+    group_name_en = db.Column(db.String(200))
+    group_name_mr = db.Column(db.String(200))
+    sub_group_hi  = db.Column(db.String(200))                       # optional sub-group
+    sub_group_en  = db.Column(db.String(200))
+    sub_group_mr  = db.Column(db.String(200))
+    when_hi       = db.Column(db.String(100))                       # कब — प्रारम्भ/मध्य/अंत
+    when_en       = db.Column(db.String(100))
+    when_mr       = db.Column(db.String(100))
+    # "के साथ / किस तरह से" — list of companions, newline-separated
+    with_items_hi = db.Column(db.Text)
+    with_items_en = db.Column(db.Text)
+    with_items_mr = db.Column(db.Text)
+    # "के बाद" — what to have after
+    after_items_hi = db.Column(db.Text)
+    after_items_en = db.Column(db.Text)
+    after_items_mr = db.Column(db.Text)
+    display_order  = db.Column(db.Integer, default=0)
+    is_active      = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<HealthyCombination {self.group_number} - {self.group_name_hi}>'
+
+
+class HarmfulCombination(db.Model):
+    """
+    Harmful food combinations (हानिकारक संयोजन) — viruddha ahara guidelines.
+    """
+    __tablename__ = 'harmful_combinations'
+
+    id            = db.Column(db.Integer, primary_key=True)
+    group_number  = db.Column(db.Integer, nullable=False)
+    group_name_hi = db.Column(db.String(200), nullable=False)
+    group_name_en = db.Column(db.String(200))
+    group_name_mr = db.Column(db.String(200))
+    sub_group_hi  = db.Column(db.String(200))
+    sub_group_en  = db.Column(db.String(200))
+    sub_group_mr  = db.Column(db.String(200))
+    # "के साथ / के बाद न दें" — items to avoid combining with
+    avoid_with_hi = db.Column(db.Text)
+    avoid_with_en = db.Column(db.Text)
+    avoid_with_mr = db.Column(db.Text)
+    # "फिर क्या दें?" — what to give instead
+    alternative_hi = db.Column(db.Text)
+    alternative_en = db.Column(db.Text)
+    alternative_mr = db.Column(db.Text)
+    # "क्यों न दें?" — reason
+    reason_hi     = db.Column(db.Text)
+    reason_en     = db.Column(db.Text)
+    reason_mr     = db.Column(db.Text)
+    display_order  = db.Column(db.Integer, default=0)
+    is_active      = db.Column(db.Boolean, default=True)
+
+    def __repr__(self):
+        return f'<HarmfulCombination {self.group_number} - {self.group_name_hi}>'
+
+
 class AdminUser(db.Model):
     __tablename__ = 'admin_users'
     
@@ -245,6 +311,8 @@ admin.add_view(SecureModelView(Disease, db.session, name='Diseases'))
 admin.add_view(SecureModelView(Taste, db.session, name='Tastes'))
 admin.add_view(SecureModelView(UserPreference, db.session, name='User Preferences'))
 admin.add_view(SecureModelView(SelectedFood, db.session, name='Selected Foods'))
+admin.add_view(SecureModelView(HealthyCombination, db.session, name='Healthy Combinations'))
+admin.add_view(SecureModelView(HarmfulCombination, db.session, name='Harmful Combinations'))
 admin.add_view(SecureModelView(AdminUser, db.session, name='Admin Users'))
 admin.add_link(MenuLink(name='🔓 Logout', url='/admin/logout', category=''))
 
@@ -578,6 +646,50 @@ def update_max_items():
     pref.max_items = new_max
     db.session.commit()
     return jsonify({'success': True, 'max_items': new_max})
+
+@app.route('/api/healthy-combinations')
+def get_healthy_combinations():
+    lang = request.args.get('lang', 'hi')
+    if lang not in ['hi', 'en', 'mr']:
+        lang = 'hi'
+    combos = HealthyCombination.query.filter_by(is_active=True).order_by(
+        HealthyCombination.display_order, HealthyCombination.id
+    ).all()
+    result = []
+    for c in combos:
+        result.append({
+            'id': c.id,
+            'group_number': c.group_number,
+            'group_name':   getattr(c, f'group_name_{lang}') or c.group_name_hi,
+            'sub_group':    getattr(c, f'sub_group_{lang}') or c.sub_group_hi or '',
+            'when':         getattr(c, f'when_{lang}') or c.when_hi or '',
+            'with_items':   getattr(c, f'with_items_{lang}') or c.with_items_hi or '',
+            'after_items':  getattr(c, f'after_items_{lang}') or c.after_items_hi or '',
+        })
+    return jsonify({'success': True, 'data': result, 'lang': lang})
+
+
+@app.route('/api/harmful-combinations')
+def get_harmful_combinations():
+    lang = request.args.get('lang', 'hi')
+    if lang not in ['hi', 'en', 'mr']:
+        lang = 'hi'
+    combos = HarmfulCombination.query.filter_by(is_active=True).order_by(
+        HarmfulCombination.display_order, HarmfulCombination.id
+    ).all()
+    result = []
+    for c in combos:
+        result.append({
+            'id': c.id,
+            'group_number': c.group_number,
+            'group_name':   getattr(c, f'group_name_{lang}') or c.group_name_hi,
+            'sub_group':    getattr(c, f'sub_group_{lang}') or c.sub_group_hi or '',
+            'avoid_with':   getattr(c, f'avoid_with_{lang}') or c.avoid_with_hi or '',
+            'alternative':  getattr(c, f'alternative_{lang}') or c.alternative_hi or '',
+            'reason':       getattr(c, f'reason_{lang}') or c.reason_hi or '',
+        })
+    return jsonify({'success': True, 'data': result, 'lang': lang})
+
 
 # ========================================================================
 # INITIALIZE DATABASE (tables only — no sample data)

@@ -8,7 +8,7 @@
 # ========================================================================
 
 from app import app, db
-from app import Season, Disease, Taste, FoodType, FoodItem, AdminUser
+from app import Season, Disease, Taste, FoodType, FoodItem, AdminUser, HealthyCombination, HarmfulCombination
 import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -632,6 +632,601 @@ def seed_foods():
     print(f"✅ {len(sample_foods)} food items seeded.")
 
 
+
+
+def seed_healthy_combinations():
+    if HealthyCombination.query.first():
+        print("⏭️  Healthy combinations already seeded, skipping.")
+        return
+
+    def hc(group_num, group_hi, group_en, group_mr,
+           sub_hi, sub_en, sub_mr,
+           when_hi, when_en, when_mr,
+           with_hi, with_en, with_mr,
+           after_hi, after_en, after_mr,
+           order=0):
+        return HealthyCombination(
+            group_number=group_num,
+            group_name_hi=group_hi, group_name_en=group_en, group_name_mr=group_mr,
+            sub_group_hi=sub_hi,   sub_group_en=sub_en,   sub_group_mr=sub_mr,
+            when_hi=when_hi,       when_en=when_en,       when_mr=when_mr,
+            with_items_hi=with_hi, with_items_en=with_en, with_items_mr=with_mr,
+            after_items_hi=after_hi, after_items_en=after_en, after_items_mr=after_mr,
+            display_order=order
+        )
+
+    # ── Group 1: रोटी / पराठा / पूरी / रोटी पोहा / बाटी / बाफला ──
+    g1_name_hi = 'रोटी / पराठा / पूरी / रोटी पोहा / बाटी / बाफला'
+    g1_name_en = 'Roti / Paratha / Puri / Roti Poha / Bati / Bafla'
+    g1_name_mr = 'रोटी / पराठा / पुरी / रोटी पोहा / बाटी / बाफला'
+    combos = [
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'सब्जी + दाल', 'Sabzi + Dal', 'भाजी + डाळ',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + दाल + सलाद + लौजी + अचार + चटनी + फल + नमकीन',
+           'Sabzi + Dal + Salad + Lauji + Pickle + Chutney + Fruit + Namkeen',
+           'भाजी + डाळ + सलाद + लौजी + लोणचे + चटणी + फळ + नमकीन',
+           'जल', 'Water', 'पाणी', 1),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'सब्जी (बिना दाल)', 'Sabzi (without Dal)', 'भाजी (डाळाशिवाय)',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + सलाद + लौजी + अचार + चटनी + फल + नमकीन',
+           'Sabzi + Salad + Lauji + Pickle + Chutney + Fruit + Namkeen',
+           'भाजी + सलाद + लौजी + लोणचे + चटणी + फळ + नमकीन',
+           'रस / जूस', 'Juice', 'रस / ज्यूस', 2),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'सब्जी + कढ़ी', 'Sabzi + Kadhi', 'भाजी + कढी',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + कढ़ी + सलाद + अचार + चटनी + नमकीन',
+           'Sabzi + Kadhi + Salad + Pickle + Chutney + Namkeen',
+           'भाजी + कढी + सलाद + लोणचे + चटणी + नमकीन',
+           'छाछ', 'Buttermilk', 'ताक', 3),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'सब्जी + छाछ', 'Sabzi + Buttermilk', 'भाजी + ताक',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + छाछ + सलाद + चटनी + नमकीन',
+           'Sabzi + Buttermilk + Salad + Chutney + Namkeen',
+           'भाजी + ताक + सलाद + चटणी + नमकीन',
+           'अन्य तरल पदार्थ', 'Other Liquids', 'इतर तरल पदार्थ', 4),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'सब्जी + रायता', 'Sabzi + Raita', 'भाजी + रायता',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + रायता + नमकीन',
+           'Sabzi + Raita + Namkeen',
+           'भाजी + रायता + नमकीन',
+           'अन्य तरल पदार्थ', 'Other Liquids', 'इतर तरल पदार्थ', 5),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'दूध', 'Milk', 'दूध',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'दूध', 'Milk', 'दूध',
+           'जल / मीठा / सूखा मेवा', 'Water / Sweet / Dry Fruit', 'पाणी / गोड / सुका मेवा', 6),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'मीठा (दूध वाला)', 'Sweet (Milk-based)', 'गोड (दुधाचे)',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'मीठा - दूध वाला', 'Milk-based Sweet', 'दुधाचे गोड',
+           'दूध', 'Milk', 'दूध', 7),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'मीठा (चाशनी वाला)', 'Sweet (Syrup-based)', 'गोड (चाशनीचे)',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'मीठा - चाशनी वाला', 'Syrup-based Sweet', 'चाशनीचे गोड',
+           'दूध', 'Milk', 'दूध', 8),
+        hc(1, g1_name_hi, g1_name_en, g1_name_mr,
+           'फल', 'Fruit', 'फळ',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'फल', 'Fruit', 'फळ',
+           '', '', '', 9),
+    ]
+
+    # ── Group 2: चीला ──
+    combos += [
+        hc(2, 'चीला', 'Chilla', 'चीला',
+           '', '', '',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सलाद + अचार + चटनी + नमकीन',
+           'Salad + Pickle + Chutney + Namkeen',
+           'सलाद + लोणचे + चटणी + नमकीन',
+           'नींबू पानी, कोकम', 'Lemon Water, Kokum', 'लिंबू पाणी, कोकम', 20),
+    ]
+
+    # ── Group 3: चावल ──
+    g3_hi = 'चावल'; g3_en = 'Rice'; g3_mr = 'तांदूळ'
+    combos += [
+        hc(3, g3_hi, g3_en, g3_mr,
+           'सादा चावल', 'Plain Rice', 'सादे तांदूळ',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'घृत + नमक + जीरा\nघृत + बूरा + काली मिर्च\nदूध\nमीठा - दूध वाला\nमीठा - चाशनी वाला\nफल, आम रस',
+           'Ghee + Salt + Cumin\nGhee + Sugar + Black Pepper\nMilk\nMilk-based Sweet\nSyrup-based Sweet\nFruit, Mango Juice',
+           'तूप + मीठ + जिरे\nतूप + साखर + मिरे\nदूध\nदुधाचे गोड\nचाशनीचे गोड\nफळ, आंब्याचा रस',
+           'अन्य तरल पदार्थ', 'Other Liquids', 'इतर तरल पदार्थ', 30),
+        hc(3, g3_hi, g3_en, g3_mr,
+           'मसाला चावल / खिचड़ी', 'Masala Rice / Khichdi', 'मसाला तांदूळ / खिचडी',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + दाल + सलाद + लौजी + अचार + चटनी + फल + नमकीन\nसब्जी + सलाद + लौजी + अचार + चटनी + फल + नमकीन\nसब्जी + कढ़ी + सलाद + अचार + चटनी + नमकीन\nसब्जी + छाछ + सलाद + चटनी + नमकीन\nसब्जी + रायता + नमकीन',
+           'Sabzi+Dal+Salad+Lauji+Pickle+Chutney+Fruit+Namkeen\nSabzi+Salad+Lauji+Pickle+Chutney+Fruit+Namkeen\nSabzi+Kadhi+Salad+Pickle+Chutney+Namkeen\nSabzi+Buttermilk+Salad+Chutney+Namkeen\nSabzi+Raita+Namkeen',
+           'भाजी+डाळ+सलाद+लौजी+लोणचे+चटणी+फळ+नमकीन\nभाजी+सलाद+लौजी+लोणचे+चटणी+फळ+नमकीन\nभाजी+कढी+सलाद+लोणचे+चटणी+नमकीन\nभाजी+ताक+सलाद+चटणी+नमकीन\nभाजी+रायता+नमकीन',
+           'बिना तला नमकीन', 'Non-fried Namkeen', 'बिनतळलेले नमकीन', 31),
+    ]
+
+    # ── Group 4: दलिया ──
+    g4_hi = 'दलिया'; g4_en = 'Daliya'; g4_mr = 'दलिया'
+    combos += [
+        hc(4, g4_hi, g4_en, g4_mr,
+           'सादा', 'Plain', 'सादे',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'दूध / छाछ\nमीठा दूध',
+           'Milk / Buttermilk\nMilk-based Sweet',
+           'दूध / ताक\nदुधाचे गोड',
+           'बिना तला नमकीन', 'Non-fried Namkeen', 'बिनतळलेले नमकीन', 40),
+        hc(4, g4_hi, g4_en, g4_mr,
+           'नमकीन दलिया', 'Namkeen Daliya', 'नमकीन दलिया',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सब्जी + सलाद + लौजी + अचार + चटनी + फल + नमकीन\nसब्जी + कढ़ी + सलाद + अचार + चटनी + नमकीन\nसब्जी + छाछ + सलाद + चटनी + नमकीन',
+           'Sabzi+Salad+Lauji+Pickle+Chutney+Fruit+Namkeen\nSabzi+Kadhi+Salad+Pickle+Chutney+Namkeen\nSabzi+Buttermilk+Salad+Chutney+Namkeen',
+           'भाजी+सलाद+लौजी+लोणचे+चटणी+फळ+नमकीन\nभाजी+कढी+सलाद+लोणचे+चटणी+नमकीन\nभाजी+ताक+सलाद+चटणी+नमकीन',
+           'नारियल पानी', 'Coconut Water', 'नारळ पाणी', 41),
+        hc(4, g4_hi, g4_en, g4_mr,
+           'महेरी', 'Maheri', 'महेरी',
+           '', '', '',
+           'कढ़ी - छाछ\nछाछ (औषधि)\nसब्जी',
+           'Kadhi - Buttermilk\nMedicinal Buttermilk\nSabzi',
+           'कढी - ताक\nऔषधी ताक\nभाजी',
+           'जल\nऔषधि जल\nबिना तला नमकीन', 'Water\nMedicinal Water\nNon-fried Namkeen', 'पाणी\nऔषधी पाणी\nबिनतळलेले नमकीन', 42),
+    ]
+
+    # ── Group 5: खींच ──
+    combos += [
+        hc(5, 'खींच', 'Kheench', 'खींच',
+           '', '', '', '', '', '',
+           'घृत + घास तले गर्म',
+           'Ghee + Warm Fried Grass',
+           'तूप + उकडलेले गरम',
+           'जल', 'Water', 'पाणी', 50),
+    ]
+
+    # ── Group 6: दूध ──
+    combos += [
+        hc(6, 'दूध', 'Milk', 'दूध',
+           'सूखा मेवा + मीठा', 'Dry Fruit + Sweet', 'सुका मेवा + गोड',
+           'प्रारम्भ / मध्य / अंत', 'Start / Middle / End', 'सुरुवात / मध्य / शेवट',
+           'सूखा मेवा + मीठा दूध वाला\nसूखा मेवा + मीठा चाशनी वाला (दाल छोड़कर)\nरोटी, पराठा, पूरी\nघृत',
+           'Dry Fruit + Milk-based Sweet\nDry Fruit + Syrup-based Sweet (except dal)\nRoti, Paratha, Puri\nGhee',
+           'सुका मेवा + दुधाचे गोड\nसुका मेवा + चाशनीचे गोड (डाळ सोडून)\nरोटी, पराठा, पुरी\nतूप',
+           'जल\nबिना तला नमकीन', 'Water\nNon-fried Namkeen', 'पाणी\nबिनतळलेले नमकीन', 60),
+    ]
+
+    # ── Group 7: दही - छाछ ──
+    combos += [
+        hc(7, 'दही - छाछ', 'Curd - Buttermilk', 'दही - ताक',
+           '', '', '', '', '', '',
+           'रोटी - पराठा - पूरी - रोटी पोहा - बाटी बाफला\nचावल - खिचड़ी - दलिया - महेरी\nनमकीन (बिना दाल)',
+           'Roti-Paratha-Puri-Roti Poha-Bati Bafla\nRice-Khichdi-Daliya-Maheri\nNamkeen (without Dal)',
+           'रोटी-पराठा-पुरी-रोटी पोहा-बाटी बाफला\nतांदूळ-खिचडी-दलिया-महेरी\nनमकीन (डाळाशिवाय)',
+           'जल\nअन्य तरल पदार्थ\nबिना तला नमकीन',
+           'Water\nOther Liquids\nNon-fried Namkeen',
+           'पाणी\nइतर तरल पदार्थ\nबिनतळलेले नमकीन', 70),
+    ]
+
+    # ── Group 8: फल ──
+    combos += [
+        hc(8, 'फल', 'Fruit', 'फळ',
+           '', '', '', '', '', '',
+           'रोटी - पराठा - पूरी - रोटी पोहा - बाटी बाफला - चावल - खिचड़ी - दलिया\n(एक साथ सभी फल न दें, बीच-२ में 1-1 लाकर देते जाएं)',
+           'Roti-Paratha-Puri-Roti Poha-Bati Bafla-Rice-Khichdi-Daliya\n(Avoid giving all fruits at once; serve one by one at intervals)',
+           'रोटी-पराठा-पुरी-रोटी पोहा-बाटी बाफला-तांदूळ-खिचडी-दलिया\n(सर्व फळे एकत्र देऊ नका, एक-एक करत द्या)',
+           'नारियल पानी', 'Coconut Water', 'नारळ पाणी', 80),
+    ]
+
+    # ── Group 9: सत्तू ──
+    combos += [
+        hc(9, 'सत्तू', 'Sattu', 'सत्तू',
+           '', '', '',
+           'मध्य', 'Middle', 'मध्य',
+           'एक बार में ही पूरा दें, अंतर न करें',
+           'Give all at once without pause',
+           'एकाच वेळी संपूर्ण द्या, अंतर करू नका',
+           'बिना तला नमकीन', 'Non-fried Namkeen', 'बिनतळलेले नमकीन', 90),
+    ]
+
+    # ── Group 10: मीठा ──
+    combos += [
+        hc(10, 'मीठा', 'Sweet', 'गोड',
+           '', '', '', '', '', '',
+           'रोटी - पराठा - पूरी - रोटी पोहा - बाटी बाफला + सूखा मेवा + दूध',
+           'Roti-Paratha-Puri-Roti Poha-Bati Bafla + Dry Fruit + Milk',
+           'रोटी-पराठा-पुरी-रोटी पोहा-बाटी बाफला + सुका मेवा + दूध',
+           'बिना तला नमकीन', 'Non-fried Namkeen', 'बिनतळलेले नमकीन', 100),
+    ]
+
+    # ── Group 11: नमकीन ──
+    combos += [
+        hc(11, 'नमकीन', 'Namkeen', 'नमकीन',
+           '', '', '', '', '', '',
+           'रोटी - पराठा - पूरी - रोटी पोहा - बाटी बाफला\n(हर तरल पदार्थ के बाद कुछ चबाने देते जाएं)',
+           'Roti-Paratha-Puri-Roti Poha-Bati Bafla\n(After every liquid, give something to chew)',
+           'रोटी-पराठा-पुरी-रोटी पोहा-बाटी बाफला\n(प्रत्येक तरल पदार्थानंतर काहीतरी चावण्यासाठी द्या)',
+           '', '', '', 110),
+    ]
+
+    # ── Group 12: अन्य तरल पदार्थ ──
+    combos += [
+        hc(12, 'अन्य तरल पदार्थ', 'Other Liquids', 'इतर तरल पदार्थ',
+           '', '', '',
+           'मध्य', 'Middle', 'मध्य',
+           'मध्य में जल के स्थान पर देते जाएं जिससे अंत में सब एक साथ न रह जाए',
+           'Give during meal in place of water, so they do not accumulate at the end',
+           'जेवणाच्या मध्यभागी पाण्याऐवजी द्या जेणेकरून शेवटी सर्व एकत्र राहणार नाहीत',
+           '', '', '', 120),
+    ]
+
+    for c in combos:
+        db.session.add(c)
+    db.session.commit()
+    print(f"✅ {len(combos)} healthy combinations seeded.")
+
+
+def seed_harmful_combinations():
+    if HarmfulCombination.query.first():
+        print("⏭️  Harmful combinations already seeded, skipping.")
+        return
+
+    def hx(group_num, group_hi, group_en, group_mr,
+            sub_hi, sub_en, sub_mr,
+            avoid_hi, avoid_en, avoid_mr,
+            alt_hi, alt_en, alt_mr,
+            reason_hi, reason_en, reason_mr,
+            order=0):
+        return HarmfulCombination(
+            group_number=group_num,
+            group_name_hi=group_hi, group_name_en=group_en, group_name_mr=group_mr,
+            sub_group_hi=sub_hi,    sub_group_en=sub_en,    sub_group_mr=sub_mr,
+            avoid_with_hi=avoid_hi, avoid_with_en=avoid_en, avoid_with_mr=avoid_mr,
+            alternative_hi=alt_hi,  alternative_en=alt_en,  alternative_mr=alt_mr,
+            reason_hi=reason_hi,    reason_en=reason_en,    reason_mr=reason_mr,
+            display_order=order
+        )
+
+    NA = ''; VIRUDDH = 'विरुद्ध आहार'; VIRUDDH_EN = 'Viruddha Ahara (Incompatible Food)'; VIRUDDH_MR = 'विरुद्ध आहार'
+    DWIDAAL = 'द्विदल अंतराय'; DWIDAAL_EN = 'Dwidala Interval (pulse interval needed)'; DWIDAAL_MR = 'द्विदल अंतराय'
+
+    harmful = [
+        # 1) चीला
+        hx(1,'चीला','Chilla','चीला',
+           'सादा','Plain','सादे',
+           'दही, छाछ\nसब्जी मिश्रित\nमीठा',
+           'Curd, Buttermilk\nMixed Vegetables\nSweet',
+           'दही, ताक\nभाजी मिश्रित\nगोड',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 10),
+
+        # 2) दाल
+        hx(2,'दाल','Dal','डाळ',
+           NA,NA,NA,
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, DWIDAAL+' / '+VIRUDDH, DWIDAAL_EN+' / '+VIRUDDH_EN, DWIDAAL_MR+' / '+VIRUDDH_MR, 20),
+
+        # 3) कढ़ी
+        hx(3,'कढ़ी','Kadhi','कढी',
+           'हरी सब्जी','Green Vegetable','हिरवी भाजी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 30),
+        hx(3,'कढ़ी','Kadhi','कढी',
+           'सूखी सब्जी','Dry Vegetable','सुकी भाजी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 31),
+
+        # 4) सलाद
+        hx(4,'सलाद','Salad','सलाड',
+           'हरी सलाद','Green Salad','हिरवे सलाड',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 40),
+        hx(4,'सलाद','Salad','सलाड',
+           'अनाज सलाद','Grain Salad','धान्य सलाड',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, DWIDAAL,DWIDAAL_EN,DWIDAAL_MR, 41),
+
+        # 5) अचार
+        hx(5,'अचार','Pickle','लोणचे',
+           NA,NA,NA,
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 50),
+
+        # 6) चटनी
+        hx(6,'चटनी','Chutney','चटणी',
+           NA,NA,NA,
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 60),
+
+        # 7) रायता
+        hx(7,'रायता','Raita','रायता',
+           'हरी सब्जी','Green Vegetable','हिरवी भाजी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 70),
+        hx(7,'रायता','Raita','रायता',
+           'सूखी सब्जी','Dry Vegetable','सुकी भाजी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 71),
+        hx(7,'रायता','Raita','रायता',
+           'छाछ','Buttermilk','ताक',
+           'दूध, फल, फलरस, सब्जी रस',
+           'Milk, Fruit, Fruit Juice, Vegetable Juice',
+           'दूध, फळ, फळाचा रस, भाजीचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 72),
+
+        # 8) कढ़ी - छाछ
+        hx(8,'कढ़ी - छाछ','Kadhi Buttermilk','कढी - ताक',
+           NA,NA,NA,
+           'दूध, फल, फल रस',
+           'Milk, Fruit, Fruit Juice',
+           'दूध, फळ, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 80),
+
+        # 9) सब्जी
+        hx(9,'सब्जी','Vegetable','भाजी',
+           'अनाज सब्जी','Grain Vegetable','धान्य भाजी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 90),
+        hx(9,'सब्जी','Vegetable','भाजी',
+           'मटर, हरा चना','Peas, Green Gram','मटर, हिरवा चणा',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 91),
+        hx(9,'सब्जी','Vegetable','भाजी',
+           'हरा ज्वार, मूंग','Green Jowar, Moong','हिरवी ज्वारी, मूग',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 92),
+        hx(9,'सब्जी','Vegetable','भाजी',
+           'हरा तुअर','Green Tuvar','हिरवी तूर',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 93),
+        hx(9,'सब्जी','Vegetable','भाजी',
+           'लौजी','Lauji','लौजी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 94),
+
+        # 10) दलिया
+        hx(10,'दलिया','Daliya','दलिया',
+           'छाछ (महेरी)','Buttermilk (Maheri)','ताक (महेरी)',
+           'दूध व दूध उत्पाद\nफल, फल रस',
+           'Milk & Milk Products\nFruit, Fruit Juice',
+           'दूध व दूध उत्पाद\nफळ, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 100),
+
+        # 11) तरल द्रव्य
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'औषधि जल','Medicinal Water','औषधी पाणी',
+           'दही, छाछ, दूध',
+           'Curd, Buttermilk, Milk',
+           'दही, ताक, दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 110),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'ठंडा जल','Cold Water','थंड पाणी',
+           'दही, छाछ, दूध, तेज गर्म वस्तु',
+           'Curd, Buttermilk, Milk, Very Hot Items',
+           'दही, ताक, दूध, खूप गरम पदार्थ',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 111),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'सूप','Soup','सूप',
+           'दही, छाछ, दूध, तेज गर्म वस्तु',
+           'Curd, Buttermilk, Milk, Very Hot Items',
+           'दही, ताक, दूध, खूप गरम पदार्थ',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 112),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'फल रस','Fruit Juice','फळाचा रस',
+           'दही, छाछ, दूध\nजल, खटाई, बूरा',
+           'Curd, Buttermilk, Milk\nWater, Sour, Powdered Sugar',
+           'दही, ताक, दूध\nपाणी, आंबट, बुरा',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 113),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'सब्जी रस','Vegetable Juice','भाजीचा रस',
+           'दही, छाछ, दूध\nजल, खटाई',
+           'Curd, Buttermilk, Milk\nWater, Sour',
+           'दही, ताक, दूध\nपाणी, आंबट',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 114),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'छाछ','Buttermilk','ताक',
+           'दही, फलरस, दूध उत्पाद',
+           'Curd, Fruit Juice, Milk Products',
+           'दही, फळाचा रस, दूध उत्पाद',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 115),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'लापसी','Lapsi','लापशी',
+           'दही - छाछ',
+           'Curd - Buttermilk',
+           'दही - ताक',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 116),
+        hx(11,'तरल द्रव्य','Liquid Items','तरल पदार्थ',
+           'सत्तू','Sattu','सत्तू',
+           'दही, छाछ, दूध, फलरस',
+           'Curd, Buttermilk, Milk, Fruit Juice',
+           'दही, ताक, दूध, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 117),
+
+        # 12) खींच
+        hx(12,'खींच','Kheench','खींच',
+           NA,NA,NA,
+           'दूध',
+           'Milk',
+           'दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 120),
+
+        # 13) दूध
+        hx(13,'दूध','Milk','दूध',
+           NA,NA,NA,
+           'दही, छाछ, फलरस\nसब्जी रस\nसब्जी (हरी मिर्च, तोरई, सलाद)\nखटाई\nफल (आम छोड़कर सभी)\nमसाला (नमक, लाल मिर्च, गुड़, इमली, गरम मसाला)\nसीड्स (सेंगदाना, तिल, अलसी)\nदाल (सभी)\nखटाई (इमली, अमचूर आदि)\nचिकनाई (तेल)\nनारियल पानी\nसत्तू',
+           'Curd, Buttermilk, Fruit Juice\nVegetable Juice\nVegetables (Green Chilli, Ridge Gourd, Salad)\nSour items\nAll Fruits except Mango\nSpices (Salt, Red Chilli, Jaggery, Tamarind, Garam Masala)\nSeeds (Peanut, Sesame, Flaxseed)\nAll Pulses\nSour (Tamarind, Dry Mango Powder)\nFat (Oil)\nCoconut Water\nSattu',
+           'दही, ताक, फळाचा रस\nभाजीचा रस\nभाज्या (हिरवी मिरची, दोडका, सलाड)\nआंबट\nआंबा सोडून सर्व फळे\nमसाले (मीठ, लाल मिरची, गूळ, चिंच, गरम मसाला)\nबिया (शेंगदाणे, तीळ, जवस)\nसर्व डाळी\nआंबट (चिंच, आमचूर इ.)\nचिकण पदार्थ (तेल)\nनारळ पाणी\nसत्तू',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 130),
+
+        # 14) फल
+        hx(14,'फल','Fruit','फळ',
+           NA,NA,NA,
+           'दूध, दही, छाछ, जल',
+           'Milk, Curd, Buttermilk, Water',
+           'दूध, दही, ताक, पाणी',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 140),
+
+        # 15) मीठा
+        hx(15,'मीठा','Sweet','गोड',
+           'दूध वाला मीठा','Milk-based Sweet','दुधाचे गोड',
+           'छाछ, फलरस, खटाई',
+           'Buttermilk, Fruit Juice, Sour',
+           'ताक, फळाचा रस, आंबट',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 150),
+        hx(15,'मीठा','Sweet','गोड',
+           'दूध सब्जी','Milk Vegetable','दूध भाजी',
+           'फल, जल, सत्तू',
+           'Fruit, Water, Sattu',
+           'फळ, पाणी, सत्तू',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 151),
+        hx(15,'मीठा','Sweet','गोड',
+           'दूध अनाज','Milk Grain','दूध धान्य',
+           '(विरुद्ध — avoid separately)',
+           '(Incompatible combination)',
+           '(विरुद्ध — वेगळे टाळा)',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 152),
+        hx(15,'मीठा','Sweet','गोड',
+           'दूध सूखा मेवा','Milk Dry Fruit','दूध सुका मेवा',
+           '(विरुद्ध — avoid separately)',
+           '(Incompatible combination)',
+           '(विरुद्ध — वेगळे टाळा)',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 153),
+        hx(15,'मीठा','Sweet','गोड',
+           'दूध फल','Milk Fruit','दूध फळ',
+           'फल, जल, सत्तू',
+           'Fruit, Water, Sattu',
+           'फळ, पाणी, सत्तू',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 154),
+        hx(15,'मीठा','Sweet','गोड',
+           'चाशनी सब्जी','Syrup Vegetable','चाशनी भाजी',
+           'जल', 'Water', 'पाणी',
+           NA,NA,NA,
+           'सर्दी, गला खराब, कफ','Cold, Sore Throat, Phlegm','सर्दी, घसा बिघडणे, कफ', 155),
+        hx(15,'मीठा','Sweet','गोड',
+           'चाशनी अनाज (हलवा)','Syrup Grain (Halwa)','चाशनी धान्य (हलवा)',
+           'जल', 'Water', 'पाणी',
+           NA,NA,NA,
+           'सर्दी, गला खराब, कफ','Cold, Sore Throat, Phlegm','सर्दी, घसा बिघडणे, कफ', 156),
+        hx(15,'मीठा','Sweet','गोड',
+           'चाशनी दाल हलवा','Syrup Dal Halwa','चाशनी डाळ हलवा',
+           'दूध, छाछ, फल रस, खटाई',
+           'Milk, Buttermilk, Fruit Juice, Sour',
+           'दूध, ताक, फळाचा रस, आंबट',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 157),
+        hx(15,'मीठा','Sweet','गोड',
+           'चाशनी दाल लड्डू','Syrup Dal Laddu','चाशनी डाळ लाडू',
+           'दूध, छाछ, फल रस, खटाई',
+           'Milk, Buttermilk, Fruit Juice, Sour',
+           'दूध, ताक, फळाचा रस, आंबट',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 158),
+        hx(15,'मीठा','Sweet','गोड',
+           'चाशनी सीड्स लड्डू','Syrup Seeds Laddu','चाशनी बिया लाडू',
+           'दूध, छाछ, फल रस, खटाई',
+           'Milk, Buttermilk, Fruit Juice, Sour',
+           'दूध, ताक, फळाचा रस, आंबट',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 159),
+        hx(15,'मीठा','Sweet','गोड',
+           'चाशनी पाक','Syrup Pak','चाशनी पाक',
+           '(विरुद्ध संयोजन से बचें)',
+           '(Avoid incompatible combinations)',
+           '(विरुद्ध संयोजन टाळा)',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 160),
+        hx(15,'मीठा','Sweet','गोड',
+           'अन्य मीठा','Other Sweets','इतर गोड',
+           'छाछ, फल रस, खटाई',
+           'Buttermilk, Fruit Juice, Sour',
+           'ताक, फळाचा रस, आंबट',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 161),
+
+        # 16) नमकीन
+        hx(16,'नमकीन','Namkeen','नमकीन',
+           'बिना तला दाल','Non-fried Dal','बिनतळलेली डाळ',
+           'दही, छाछ, दूध, फल रस',
+           'Curd, Buttermilk, Milk, Fruit Juice',
+           'दही, ताक, दूध, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 161),
+        hx(16,'नमकीन','Namkeen','नमकीन',
+           'तला अनाज','Fried Grain','तळलेले धान्य',
+           'दूध',
+           'Milk',
+           'दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 162),
+        hx(16,'नमकीन','Namkeen','नमकीन',
+           'तला हुआ दाल','Fried Dal','तळलेली डाळ',
+           'दही, छाछ, दूध, फल रस',
+           'Curd, Buttermilk, Milk, Fruit Juice',
+           'दही, ताक, दूध, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 163),
+        hx(16,'नमकीन','Namkeen','नमकीन',
+           'तला हुआ सब्जी','Fried Vegetable','तळलेली भाजी',
+           'दूध',
+           'Milk',
+           'दूध',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 164),
+        hx(16,'नमकीन','Namkeen','नमकीन',
+           'तला सूखा मेवा','Fried Dry Fruit','तळलेला सुका मेवा',
+           'दही, छाछ, दूध, फल रस',
+           'Curd, Buttermilk, Milk, Fruit Juice',
+           'दही, ताक, दूध, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 165),
+        hx(16,'नमकीन','Namkeen','नमकीन',
+           'भजिया','Bhajiya','भजी',
+           'दूध, फल रस',
+           'Milk, Fruit Juice',
+           'दूध, फळाचा रस',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 166),
+
+        # 17) दही - छाछ
+        hx(17,'दही - छाछ','Curd - Buttermilk','दही - ताक',
+           NA,NA,NA,
+           'दूध, फल रस, फल\nखटाई, मीठा\nनारियल पानी\nसीड्स, तैल\nदाल\nगुड़ (इमली पानी)\nपनीर, तेज गर्म वस्तु',
+           'Milk, Fruit Juice, Fruit\nSour, Sweet\nCoconut Water\nSeeds, Oil\nPulse\nJaggery (Tamarind Water)\nPaneer, Very Hot items',
+           'दूध, फळाचा रस, फळ\nआंबट, गोड\nनारळ पाणी\nबिया, तेल\nडाळ\nगूळ (चिंच पाणी)\nपनीर, अति गरम पदार्थ',
+           NA,NA,NA,
+           'विरुद्ध आहार / स्वास्थ्य खराब',
+           'Viruddha Ahara / Harmful to Health',
+           'विरुद्ध आहार / आरोग्य बिघडते', 170),
+
+        # 18) घृत
+        hx(18,'घृत','Ghee','तूप',
+           NA,NA,NA,
+           'खटाई, नींबू',
+           'Sour, Lemon',
+           'आंबट, लिंबू',
+           NA,NA,NA, VIRUDDH,VIRUDDH_EN,VIRUDDH_MR, 180),
+    ]
+
+    for h in harmful:
+        db.session.add(h)
+    db.session.commit()
+    print(f"✅ {len(harmful)} harmful combinations seeded.")
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
@@ -643,5 +1238,7 @@ if __name__ == '__main__':
         seed_tastes()
         seed_food_types()
         seed_foods()
+        seed_healthy_combinations()
+        seed_harmful_combinations()
         print("=" * 45)
         print("✅ All done! You can now run: python app.py\n")

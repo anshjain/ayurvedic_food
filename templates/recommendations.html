@@ -321,6 +321,12 @@
             <div class="nav-tab" onclick="switchTab('education')" data-tab="education">
                 📚 <span data-lang="hi">शिक्षा</span><span data-lang="en" style="display:none">Education</span><span data-lang="mr" style="display:none">शिक्षण</span>
             </div>
+            <div class="nav-tab" onclick="switchTab('healthycombo')" data-tab="healthycombo">
+                ✅ <span data-lang="hi">हेल्दी संयोजन</span><span data-lang="en" style="display:none">Healthy Combos</span><span data-lang="mr" style="display:none">आरोग्यदायी संयोजन</span>
+            </div>
+            <div class="nav-tab" onclick="switchTab('harmfulcombo')" data-tab="harmfulcombo">
+                ⚠️ <span data-lang="hi">हानिकारक संयोजन</span><span data-lang="en" style="display:none">Harmful Combos</span><span data-lang="mr" style="display:none">हानिकारक संयोजन</span>
+            </div>
         </div>
         <div class="rec-date-bar" id="recDateBarDesktop"></div>
     </div>
@@ -493,6 +499,8 @@
 <div id="tab-panel-shodhana" class="tab-panel">{% include 'tabs/shodhana.html' %}</div>
 <div id="tab-panel-dryprep" class="tab-panel">{% include 'tabs/dry_preparation.html' %}</div>
 <div id="tab-panel-education" class="tab-panel">{% include 'tabs/food_education.html' %}</div>
+<div id="tab-panel-healthycombo" class="tab-panel">{% include 'tabs/healthy_combinations.html' %}</div>
+<div id="tab-panel-harmfulcombo" class="tab-panel">{% include 'tabs/harmful_combinations.html' %}</div>
 
 <!-- ══ MOBILE BOTTOM NAV ═══════════════════════════════════ -->
 <nav class="bottom-nav">
@@ -515,6 +523,14 @@
     <button class="nav-item" onclick="switchTab('education')" data-tab="education" type="button">
         <span class="nav-item-icon">📚</span>
         <span class="nav-item-label" data-lang="hi">ज्ञान</span><span class="nav-item-label" data-lang="en" style="display:none">Learn</span><span class="nav-item-label" data-lang="mr" style="display:none">ज्ञान</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('healthycombo')" data-tab="healthycombo" type="button">
+        <span class="nav-item-icon">✅</span>
+        <span class="nav-item-label" data-lang="hi">हेल्दी</span><span class="nav-item-label" data-lang="en" style="display:none">Healthy</span><span class="nav-item-label" data-lang="mr" style="display:none">आरोग्य</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('harmfulcombo')" data-tab="harmfulcombo" type="button">
+        <span class="nav-item-icon">⚠️</span>
+        <span class="nav-item-label" data-lang="hi">हानिकारक</span><span class="nav-item-label" data-lang="en" style="display:none">Harmful</span><span class="nav-item-label" data-lang="mr" style="display:none">हानिकारक</span>
     </button>
     <button class="nav-item" onclick="toggleCart()" type="button">
         <span class="nav-item-icon">🛒</span>
@@ -965,6 +981,8 @@ function switchTab(name) {
         if (name==='rawmaterial' && typeof loadRawMaterialTab==='function') loadRawMaterialTab(cachedFoodData);
         if (name==='shodhana' && typeof loadShodhanaTab==='function') loadShodhanaTab();
         if (name==='dryprep' && typeof loadDryPrepTab==='function') loadDryPrepTab();
+        if (name==='healthycombo' && typeof _loadHealthyCombinations==='function') _loadHealthyCombinations(currentLang);
+        if (name==='harmfulcombo' && typeof _loadHarmfulCombinations==='function') _loadHarmfulCombinations(currentLang);
     }
     applyLanguage(currentLang);
 }
