@@ -19,8 +19,14 @@ sys.stdout.reconfigure(encoding='utf-8')
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here-change-in-production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ayurvedic_food.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+if os.environ.get("ENVIRONMENT") == "local":
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ayurvedic_food.db"
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 # Initialize database
 db = SQLAlchemy(app)
